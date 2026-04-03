@@ -595,54 +595,60 @@ async function submitStep2(){
   const btn=document.getElementById('step2Btn');
   btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Creating account…';hideMsg('msg2');
   try{
-    // Use the session's accessToken if available, else try login to get one
-    let token = sessionUser.accessToken;
-
-    // If no token cached, we need a fresh one via OTP — but since user already verified
-    // during signup on main.html, we re-login to get a token
-    if(!token){
-      // Try to fetch via login endpoint (password was set during main.html signup)
-      const loginRes = await fetch(`${API_BASE}/api/login`,{
+    // ── Google user ──
+    if(sessionUser.googleId){
+      const res=await fetch(`${API_BASE}/api/register-google`,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email:userData.email, password:userData.password})
+        body:JSON.stringify({
+          name:userData.name,
+          email:userData.email,
+          siteName:userData.siteName,
+          siteUrl:userData.siteUrl,
+          password:userData.password,
+          plan:selectedPlan,
+          googleId:sessionUser.googleId,
+          avatarUrl:sessionUser.avatarUrl||''
+        })
       });
-      const loginData = await loginRes.json();
-      if(loginData.success && loginData.user){
-        // User already fully registered — go straight to step 3
-        const u = loginData.user;
-        localStorage.setItem('mezuka_user', JSON.stringify({...sessionUser,...u}));
-        buildSnippet(u.apiKey, API_BASE||window.location.origin);
-        document.getElementById('apiKeyDisplay').textContent = u.apiKey;
-        if(selectedPlan!=='free') document.getElementById('paidPlanReminder').style.display='block';
-        btn.disabled=false; btn.innerHTML='Complete Registration →';
-        goToStep(3); return;
+      const data=await res.json();
+      if(!data.success){showMsg('msg2','error',data.message||'Registration failed.');btn.disabled=false;btn.innerHTML='Complete Registration →';return;}
+      generatedApiKey=data.apiKey;
+      const updated={...sessionUser,apiKey:data.apiKey,plan:data.plan||selectedPlan,dailyLimit:data.dailyLimit,siteName:userData.siteName,siteUrl:userData.siteUrl};
+      localStorage.setItem('mezuka_user',JSON.stringify(updated));
+      buildSnippet(data.apiKey,API_BASE||window.location.origin);
+      document.getElementById('apiKeyDisplay').textContent=data.apiKey;
+      if(selectedPlan!=='free')document.getElementById('paidPlanReminder').style.display='block';
+      btn.disabled=false;btn.innerHTML='Complete Registration →';
+      goToStep(3);return;
+    }
+
+    // ── WhatsApp OTP user ──
+    let token=sessionUser.accessToken;
+    if(!token){
+      const loginRes=await fetch(`${API_BASE}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:userData.email,password:userData.password})});
+      const loginData=await loginRes.json();
+      if(loginData.success&&loginData.user){
+        const u=loginData.user;
+        localStorage.setItem('mezuka_user',JSON.stringify({...sessionUser,...u}));
+        buildSnippet(u.apiKey,API_BASE||window.location.origin);
+        document.getElementById('apiKeyDisplay').textContent=u.apiKey;
+        if(selectedPlan!=='free')document.getElementById('paidPlanReminder').style.display='block';
+        btn.disabled=false;btn.innerHTML='Complete Registration →';
+        goToStep(3);return;
       }
     }
-
-    // Register via WhatsApp-verified token (from main.html signup flow)
-    if(!token){
-      showMsg('msg2','error','Session expired. Please sign in again from the home page.');
-      btn.disabled=false; btn.innerHTML='Complete Registration →'; return;
-    }
-
-    const res=await fetch(`${API_BASE}/api/register`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
-      body:JSON.stringify({...userData,plan:selectedPlan})
-    });
+    if(!token){showMsg('msg2','error','Session expired. Please sign in again from the home page.');btn.disabled=false;btn.innerHTML='Complete Registration →';return;}
+    const res=await fetch(`${API_BASE}/api/register`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},body:JSON.stringify({...userData,plan:selectedPlan})});
     const data=await res.json();
-    if(!data.success){showMsg('msg2','error',data.message||'Registration failed. Please try again.');btn.disabled=false;btn.innerHTML='Complete Registration →';return;}
+    if(!data.success){showMsg('msg2','error',data.message||'Registration failed.');btn.disabled=false;btn.innerHTML='Complete Registration →';return;}
     generatedApiKey=data.apiKey;
-
-    // Update session
-    const updated = {...sessionUser, apiKey:data.apiKey, plan:data.plan||selectedPlan, dailyLimit:data.dailyLimit, siteName:userData.siteName, siteUrl:userData.siteUrl};
-    localStorage.setItem('mezuka_user', JSON.stringify(updated));
-
-    buildSnippet(data.apiKey, API_BASE||window.location.origin);
+    const updated={...sessionUser,apiKey:data.apiKey,plan:data.plan||selectedPlan,dailyLimit:data.dailyLimit,siteName:userData.siteName,siteUrl:userData.siteUrl};
+    localStorage.setItem('mezuka_user',JSON.stringify(updated));
+    buildSnippet(data.apiKey,API_BASE||window.location.origin);
     document.getElementById('apiKeyDisplay').textContent=data.apiKey;
-    if(selectedPlan!=='free') document.getElementById('paidPlanReminder').style.display='block';
-    btn.disabled=false; btn.innerHTML='Complete Registration →';
+    if(selectedPlan!=='free')document.getElementById('paidPlanReminder').style.display='block';
+    btn.disabled=false;btn.innerHTML='Complete Registration →';
     goToStep(3);
   }catch(e){showMsg('msg2','error','Network error. Please try again.');btn.disabled=false;btn.innerHTML='Complete Registration →';}
 }
