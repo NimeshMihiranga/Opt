@@ -116,31 +116,47 @@ app.get('/code', async (req, res) => {
       printQRInTerminal: false,
       logger,
       browser: ['Ubuntu', 'Chrome', '20.0.04'],
+      connectTimeoutMs: 60000,
+      defaultQueryTimeoutMs: 60000,
     });
 
     pairingSockets.set(sanitizedNumber, pairSocket);
     pairSocket.ev.on('creds.update', saveCreds);
 
     const pairCode = await new Promise(async (resolve, reject) => {
-      const timeout = setTimeout(() => reject(new Error('PAIR_CODE_TIMEOUT')), 30000);
+      const timeout = setTimeout(() => {
+        console.error(`❌ [PAIR] Timeout for ${sanitizedNumber}`);
+        reject(new Error('PAIR_CODE_TIMEOUT'));
+      }, 60000);
       try {
-        await new Promise(r => setTimeout(r, 3000));
+        console.log(`⏳ [PAIR] Waiting 5s before requesting code for ${sanitizedNumber}…`);
+        await new Promise(r => setTimeout(r, 5000));
+        console.log(`📲 [PAIR] Requesting pairing code for ${sanitizedNumber}…`);
         const code = await pairSocket.requestPairingCode(sanitizedNumber);
         clearTimeout(timeout);
-        resolve(code?.match(/.{1,4}/g)?.join('-') || code);
+        const formatted = code?.match(/.{1,4}/g)?.join('-') || code;
+        console.log(`✅ [PAIR] Code for ${sanitizedNumber}: ${formatted}`);
+        resolve(formatted);
       } catch (err) {
         clearTimeout(timeout);
+        console.error(`❌ [PAIR] requestPairingCode failed for ${sanitizedNumber}:`, err.message);
         reject(err);
       }
     });
 
     pairSocket.ev.on('connection.update', ({ connection, lastDisconnect }) => {
+      if (connection === 'connecting') {
+        console.log(`🔗 [PAIR] Connecting socket for ${sanitizedNumber}…`);
+      }
       if (connection === 'open') {
+        console.log(`✅ [PAIR] Bot connected successfully for ${sanitizedNumber}`);
         pairingSockets.delete(sanitizedNumber);
         if (!global.WA_SESSIONS) global.WA_SESSIONS = new Map();
         global.WA_SESSIONS.set(sanitizedNumber, pairSocket);
       }
       if (connection === 'close') {
+        const reason = lastDisconnect?.error?.message || 'unknown';
+        console.log(`🔌 [PAIR] Connection closed for ${sanitizedNumber} — reason: ${reason}`);
         pairingSockets.delete(sanitizedNumber);
       }
     });
