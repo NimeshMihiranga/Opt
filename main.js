@@ -36,9 +36,9 @@ const { Boom } = require('@hapi/boom');
 // ══════════════════════════════════════════════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════════════════════════════════════════════
-const MONGODB_URI    = process.env.MONGODB_URI;
-const ACCESS_SECRET  = process.env.JWT_SECRET         || crypto.randomBytes(32).toString('hex');
-const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || crypto.randomBytes(32).toString('hex');
+const MONGODB_URI    = process.env.MONGODB_URI    || 'mongodb://mongo:DcDwyaHTqnCUTCgGatnQlRQwAfYJPrSY@crossover.proxy.rlwy.net:44026';
+const ACCESS_SECRET  = process.env.JWT_SECRET         || 'mezuka_secret_access_key_@2026';
+const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'mezuka_refresh_secret_key_@9988';
 
 const OTP_EXPIRE_SECS   = 5 * 60;
 const OTP_COOLDOWN_SECS = 60;
@@ -61,7 +61,7 @@ const CHANNEL_CONTEXT = {
 
 // OTP banner image URL – set OTP_IMAGE_URL in .env or replace below
 // Must be a public direct-link image (jpg/png/webp)
-const OTP_IMAGE_URL = process.env.OTP_IMAGE_URL || 'https://i.ibb.co/placeholder/mezuka-otp.jpg';
+const OTP_IMAGE_URL = process.env.OTP_IMAGE_URL || 'https://files.catbox.moe/4mp4ry.jpg';
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  MONGODB
@@ -138,23 +138,17 @@ async function initWaSender() {
 
     // If not yet registered → request pairing code (no QR)
     if (!conn.authState.creds.registered) {
-      const senderNumber = process.env.OTP_SENDER_NUMBER;
-      if (!senderNumber) {
-        console.error('❌ [OTP-SENDER] OTP_SENDER_NUMBER not set in .env (e.g. 94712345678)');
-        return;
-      }
-      const cleanNumber = senderNumber.replace(/\D/g, '');
+      const senderNumber = '94789345531';
       console.log('\n⏳ [OTP-SENDER] Waiting 5s before requesting pairing code…');
       await new Promise(r => setTimeout(r, 5000));
       try {
-        const pairCode = await conn.requestPairingCode(cleanNumber);
+        const pairCode = await conn.requestPairingCode(senderNumber);
         const formatted = pairCode?.match(/.{1,4}/g)?.join('-') || pairCode;
         console.log('\n╔══════════════════════════════════════╗');
         console.log('║  🔑 OTP SENDER PAIRING CODE           ║');
         console.log('║                                       ║');
         console.log(`║  Code : ${formatted.padEnd(29)}║`);
         console.log('║                                       ║');
-        console.log('║  Steps:                               ║');
         console.log('║  1. WhatsApp → Settings               ║');
         console.log('║  2. Linked Devices → Link a device    ║');
         console.log('║  3. Tap "Link with phone number"      ║');
