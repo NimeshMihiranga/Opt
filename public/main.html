@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mezuka OPT Service – by Black Cat Ofc</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#4ecdc4;
+  --teal-d:#2bb5ab;
+  --teal-dd:#1a8f87;
+  --teal-l:#7eddd7;
+  --teal-xl:#b2ebe8;
+  --teal-bg:#e8faf9;
+  --teal-bg2:#f0fdfc;
+  --pink:#ff6b9d;
+  --pink-l:#ffb3cc;
+  --pink-bg:rgba(255,107,157,0.08);
+  --white:#fff;
+  --dark:#1a2e2e;
+  --dark2:#2a3d3d;
+  --gray:#6b8080;
+  --gray-l:#a0b8b8;
+  --gray-bg:#f5fafa;
+  --card-s:0 4px 24px rgba(78,205,196,0.13);
+  --card-sh:0 12px 40px rgba(78,205,196,0.25);
+  --green:#2ecc71;
+  --wa-green:#25d366;
+  --wa-green-d:#128c7e;
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--teal-bg2);
+  color:var(--dark);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(78,205,196,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 90% 100%, rgba(255,107,157,0.07) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%234ecdc4' fill-opacity='0.025'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(78,205,196,0.18);
+  padding:0 20px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  box-shadow:0 2px 16px rgba(78,205,196,0.08);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{
+  width:28px;height:28px;border-radius:8px;overflow:hidden;
+  border:1.5px solid rgba(78,205,196,0.3);
+  box-shadow:0 4px 12px rgba(37,211,102,0.2);flex-shrink:0;
+}
+.nav-logo-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+.nav-brand{font-size:13px;font-weight:900;color:var(--dark);letter-spacing:-0.3px;}
+.nav-brand span{
+  background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{
+  color:var(--gray);font-size:13px;text-decoration:none;font-weight:600;
+  padding:6px 12px;border-radius:10px;
+  transition:color .2s,background .2s;
+}
+.nav-links a:hover{color:var(--dark);background:var(--teal-bg);}
+.nav-cta{
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:#fff!important;font-weight:800!important;
+  border-radius:12px!important;
+  box-shadow:0 4px 16px rgba(37,211,102,0.3);
+}
+.nav-cta:hover{opacity:.9;transform:translateY(-1px);}
+.nav-menu-btn{
+  width:32px;height:32px;border-radius:9px;
+  background:rgba(78,205,196,0.08);border:1px solid rgba(78,205,196,0.2);
+  display:none;flex-direction:column;justify-content:center;align-items:center;gap:4px;
+  cursor:pointer;transition:background 0.18s;flex-shrink:0;
+}
+.nav-menu-btn span{display:block;width:14px;height:1.6px;background:var(--teal-d);border-radius:2px;}
+
+/* ── PROFILE ICON IN NAV ── */
+.nav-profile-area{display:flex;align-items:center;gap:8px;}
+.nav-auth-btn{
+  padding:6px 14px;border-radius:10px;border:none;cursor:pointer;
+  font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;
+  transition:all .2s;
+}
+.nav-signin-btn{
+  background:rgba(78,205,196,0.1);color:var(--teal-d);
+  border:1.5px solid rgba(78,205,196,0.25);
+}
+.nav-signin-btn:hover{background:rgba(78,205,196,0.2);}
+.nav-signup-btn{
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;box-shadow:0 3px 12px rgba(37,211,102,0.3);
+}
+.nav-signup-btn:hover{opacity:.9;transform:translateY(-1px);}
+.profile-avatar-btn{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,var(--wa-green),var(--teal-d));
+  border:2px solid rgba(37,211,102,0.4);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:900;color:white;
+  box-shadow:0 3px 12px rgba(37,211,102,0.3);
+  transition:all .2s;position:relative;
+}
+.profile-avatar-btn:hover{transform:scale(1.08);box-shadow:0 6px 18px rgba(37,211,102,0.4);}
+.profile-dropdown{
+  position:absolute;top:calc(100% + 10px);right:0;
+  width:300px;background:white;
+  border:1px solid rgba(78,205,196,0.2);border-radius:20px;
+  box-shadow:0 20px 60px rgba(78,205,196,0.2);
+  animation:fadeUp .25s ease;z-index:300;overflow:hidden;
+}
+.profile-dropdown-head{
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  padding:20px;
+}
+.profile-dropdown-avatar{
+  width:52px;height:52px;border-radius:16px;
+  background:rgba(255,255,255,0.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;margin-bottom:10px;
+  border:2px solid rgba(255,255,255,0.4);
+}
+.profile-dropdown-name{font-size:15px;font-weight:900;color:white;letter-spacing:-0.3px;}
+.profile-dropdown-email{font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px;font-family:'JetBrains Mono',monospace;}
+.profile-dropdown-plan{
+  display:inline-block;margin-top:8px;
+  background:rgba(255,255,255,0.2);color:white;
+  font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:3px 10px;border-radius:100px;font-family:'JetBrains Mono',monospace;
+  border:1px solid rgba(255,255,255,0.3);
+}
+.profile-dropdown-body{padding:16px;}
+.profile-stat-row{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;
+}
+.profile-stat{
+  background:var(--teal-bg);border:1px solid rgba(78,205,196,0.15);
+  border-radius:12px;padding:12px;text-align:center;
+}
+.profile-stat-num{
+  font-size:20px;font-weight:900;letter-spacing:-1px;
+  background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.profile-stat-label{font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;font-family:'JetBrains Mono',monospace;margin-top:2px;}
+.profile-site-info{
+  background:var(--teal-bg);border:1px solid rgba(78,205,196,0.15);
+  border-radius:12px;padding:12px 14px;margin-bottom:12px;
+}
+.profile-site-label{font-size:9px;font-weight:700;color:var(--gray-l);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;margin-bottom:5px;}
+.profile-site-name{font-size:13px;font-weight:800;color:var(--dark);}
+.profile-site-url{font-size:11px;color:var(--teal-d);font-family:'JetBrains Mono',monospace;word-break:break-all;}
+.profile-api-row{
+  background:var(--dark);border-radius:10px;padding:10px 12px;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px;
+}
+.profile-api-val{font-family:'JetBrains Mono',monospace;font-size:10px;color:#a8ffd8;word-break:break-all;}
+.profile-api-copy{flex-shrink:0;background:rgba(78,205,196,0.15);border:1px solid rgba(78,205,196,0.3);border-radius:6px;color:#a8ffd8;font-size:10px;font-weight:800;padding:4px 9px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.profile-api-copy:hover{background:rgba(78,205,196,0.25);}
+.profile-dropdown-actions{display:flex;flex-direction:column;gap:6px;}
+.profile-action-btn{
+  width:100%;padding:10px;border-radius:11px;border:none;cursor:pointer;
+  font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;transition:all .2s;
+  display:flex;align-items:center;gap:8px;
+}
+.profile-action-btn.go-connect{
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;box-shadow:0 4px 14px rgba(37,211,102,0.3);
+}
+.profile-action-btn.go-connect:hover{opacity:.9;}
+.profile-action-btn.logout-btn{
+  background:rgba(224,85,85,0.08);color:#e05555;
+  border:1px solid rgba(224,85,85,0.18);
+}
+.profile-action-btn.logout-btn:hover{background:rgba(224,85,85,0.14);}
+.profile-wrapper{position:relative;}
+
+/* ── AUTH MODAL ── */
+.auth-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(26,46,46,0.6);backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.auth-modal-overlay.open{display:flex;}
+.auth-modal{
+  background:white;border-radius:28px;width:100%;max-width:440px;
+  box-shadow:0 32px 80px rgba(78,205,196,0.22);
+  overflow:hidden;animation:modalPop .35s cubic-bezier(0.34,1.4,0.64,1);
+  position:relative;
+}
+@keyframes modalPop{from{opacity:0;transform:scale(0.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.auth-modal-header{
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d),var(--teal-d));
+  padding:32px 32px 28px;text-align:center;position:relative;
+}
+.auth-modal-logo{
+  width:64px;height:64px;border-radius:18px;overflow:hidden;
+  border:3px solid rgba(255,255,255,0.35);margin:0 auto 14px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.15);
+}
+.auth-modal-logo img{width:100%;height:100%;object-fit:cover;display:block;}
+.auth-modal-title{font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;margin-bottom:4px;}
+.auth-modal-sub{font-size:12.5px;color:rgba(255,255,255,0.8);}
+.auth-tab-row{
+  display:flex;background:rgba(255,255,255,0.15);border-radius:12px;
+  padding:4px;margin-top:16px;gap:4px;
+}
+.auth-tab{
+  flex:1;padding:8px;border-radius:8px;border:none;background:transparent;
+  color:rgba(255,255,255,0.7);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.auth-tab.active{background:white;color:var(--wa-green-d);box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+.auth-modal-close{
+  position:absolute;top:14px;right:14px;
+  width:30px;height:30px;border-radius:50%;border:none;
+  background:rgba(255,255,255,0.18);color:white;font-size:13px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.auth-modal-close:hover{background:rgba(255,255,255,0.3);}
+.auth-modal-body{padding:28px 32px 32px;}
+.auth-form-panel{display:none;}
+.auth-form-panel.active{display:block;}
+.auth-field{margin-bottom:14px;}
+.auth-label{display:block;font-size:10px;font-weight:800;color:var(--dark);margin-bottom:6px;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.auth-input{
+  width:100%;padding:11px 14px;
+  background:var(--teal-bg);border:1.5px solid rgba(78,205,196,0.2);border-radius:12px;
+  color:var(--dark);font-size:14px;font-family:'Nunito',sans-serif;font-weight:600;
+  outline:none;transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.auth-input::placeholder{color:var(--gray-l);font-weight:400;}
+.auth-input:focus{border-color:rgba(78,205,196,0.5);background:white;box-shadow:0 0 0 3px rgba(78,205,196,0.12);}
+.auth-input.error{border-color:rgba(224,85,85,0.45);}
+.auth-input-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;}
+.auth-otp-btn{
+  padding:11px 14px;border-radius:12px;cursor:pointer;white-space:nowrap;
+  background:rgba(37,211,102,0.1);border:1.5px solid rgba(37,211,102,0.3);
+  color:var(--wa-green-d);font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;
+  transition:all .2s;
+}
+.auth-otp-btn:hover{background:rgba(37,211,102,0.18);}
+.auth-otp-btn:disabled{opacity:.4;cursor:not-allowed;}
+.auth-otp-large input{letter-spacing:10px;font-size:20px;font-weight:900;text-align:center;font-family:'JetBrains Mono',monospace;}
+.auth-msg{
+  padding:10px 14px;border-radius:11px;font-size:12.5px;font-weight:600;
+  margin-bottom:14px;display:none;align-items:center;gap:8px;
+}
+.auth-msg.show{display:flex;}
+.auth-msg.error{background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.22);color:#e05555;}
+.auth-msg.success{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.25);color:var(--wa-green-d);}
+.auth-submit-btn{
+  width:100%;padding:13px;border:none;border-radius:13px;cursor:pointer;
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-size:14px;font-weight:900;font-family:'Nunito',sans-serif;
+  transition:all .22s cubic-bezier(0.34,1.4,0.64,1);margin-top:6px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 24px rgba(37,211,102,0.3);
+}
+.auth-submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(37,211,102,0.4);}
+.auth-submit-btn:active{transform:scale(0.98);}
+.auth-submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.auth-spinner{width:16px;height:16px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.auth-divider{height:1px;background:rgba(78,205,196,0.15);margin:18px 0;}
+.auth-switch{text-align:center;font-size:12.5px;color:var(--gray);}
+.auth-switch a{color:var(--teal-d);font-weight:800;cursor:pointer;text-decoration:none;}
+.auth-switch a:hover{color:var(--wa-green-d);}
+.auth-plan-select{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.auth-plan-opt{
+  background:var(--teal-bg);border:1.5px solid rgba(78,205,196,0.15);
+  border-radius:13px;padding:13px 10px;cursor:pointer;transition:all .2s;
+  text-align:center;position:relative;
+}
+.auth-plan-opt:hover{border-color:rgba(37,211,102,0.35);}
+.auth-plan-opt.selected{border-color:var(--wa-green);background:rgba(37,211,102,0.07);box-shadow:0 0 0 3px rgba(37,211,102,0.1);}
+.auth-plan-opt.selected::after{content:'✓';position:absolute;top:6px;right:8px;color:var(--wa-green);font-weight:900;font-size:12px;}
+.auth-plan-name{font-weight:900;font-size:13px;color:var(--dark);margin-bottom:3px;}
+.auth-plan-limit{font-size:10px;color:var(--wa-green-d);font-weight:700;font-family:'JetBrains Mono',monospace;}
+.auth-plan-price{font-size:11px;color:var(--gray);margin-top:3px;font-weight:600;}
+.auth-plan-badge{
+  position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-size:7px;font-weight:800;padding:2px 8px;border-radius:100px;
+  letter-spacing:.8px;font-family:'JetBrains Mono',monospace;white-space:nowrap;
+}
+.auth-privacy-row{display:flex;align-items:flex-start;gap:8px;margin:12px 0;}
+.auth-privacy-row input[type=checkbox]{width:16px;height:16px;flex-shrink:0;cursor:pointer;accent-color:var(--wa-green);margin-top:2px;}
+.auth-privacy-row label{font-size:12px;color:var(--gray);line-height:1.5;cursor:pointer;font-weight:500;}
+.auth-privacy-row label a{color:var(--teal-d);font-weight:700;}
+.signup-step{display:none;}
+.signup-step.active{display:block;}
+
+/* ── OAUTH BUTTONS ── */
+.oauth-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:13px;border-radius:13px;
+  text-decoration:none;font-size:14px;font-weight:800;
+  font-family:'Nunito',sans-serif;transition:all .22s;
+  cursor:pointer;border:none;
+}
+.oauth-github{
+  background:#24292f;color:white;
+  box-shadow:0 4px 18px rgba(36,41,47,0.3);
+}
+.oauth-github:hover{background:#1a1f24;transform:translateY(-1px);}
+.oauth-google{
+  background:white;color:#3c4043;
+  border:1.5px solid #dadce0;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+.oauth-google:hover{background:#f8f8f8;box-shadow:0 4px 16px rgba(0,0,0,0.15);transform:translateY(-1px);}
+.oauth-divider{
+  display:flex;align-items:center;gap:10px;
+  margin:16px 0;color:var(--gray-l);font-size:11px;
+  font-family:'JetBrains Mono',monospace;
+}
+.oauth-divider::before,.oauth-divider::after{
+  content:'';flex:1;height:1px;background:rgba(78,205,196,0.18);
+}
+.oauth-divider span{white-space:nowrap;}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  padding:72px 5% 56px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  animation:fadeUp 0.6s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes logoPop{from{opacity:0;transform:scale(0.6) rotate(-8deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;margin-bottom:28px;
+  background:rgba(37,211,102,0.1);
+  border:1px solid rgba(37,211,102,0.28);border-radius:100px;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--wa-green-d);font-family:'JetBrains Mono',monospace;
+}
+.hero-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wa-green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+.hero-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+  background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;animation:fadeUp 0.6s ease 0.15s both;
+}
+.hero-title{
+  font-size:clamp(40px,7.5vw,80px);
+  font-weight:1000;letter-spacing:-3px;line-height:1.0;
+  color:var(--dark);margin-bottom:8px;animation:fadeUp 0.6s ease 0.2s both;
+}
+.hero-title span{
+  background:linear-gradient(135deg,var(--wa-green) 0%,var(--wa-green-d) 50%,var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:16px;color:var(--gray);max-width:480px;line-height:1.7;
+  margin:0 auto 36px;font-weight:500;animation:fadeUp 0.6s ease 0.25s both;
+}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.6s ease 0.3s both;}
+.btn-primary{
+  padding:14px 32px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1);
+  box-shadow:0 6px 28px rgba(37,211,102,0.35);
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 40px rgba(37,211,102,0.45);}
+.btn-primary:active{transform:scale(0.97);}
+.btn-ghost{
+  padding:14px 24px;border-radius:16px;
+  border:2px solid rgba(78,205,196,0.3);
+  background:rgba(78,205,196,0.06);
+  color:var(--teal-d);font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  cursor:pointer;transition:all 0.22s;
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+}
+.btn-ghost:hover{background:rgba(78,205,196,0.12);border-color:var(--teal);transform:translateY(-2px);}
+.hero-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  margin-top:52px;width:100%;max-width:680px;
+  animation:fadeUp 0.6s ease 0.4s both;
+}
+.stat-card{
+  background:white;border:1px solid rgba(78,205,196,0.15);
+  border-radius:20px;padding:20px 16px;text-align:center;
+  box-shadow:var(--card-s);transition:all 0.22s;
+  position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--wa-green),var(--teal));
+}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--card-sh);}
+.stat-num{
+  font-size:28px;font-weight:900;letter-spacing:-1.5px;line-height:1;
+  background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:5px;
+}
+.stat-label{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;}
+
+/* ── PAGE WRAPPER ── */
+.page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 22px 80px;}
+
+/* ── SECTION HEADER ── */
+.sec-hd{text-align:center;margin-bottom:32px;}
+.sec-pill{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal-d);font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.sec-title{font-size:28px;font-weight:900;letter-spacing:-0.8px;color:var(--dark);margin-bottom:8px;}
+.sec-sub{font-size:13.5px;color:var(--gray);max-width:440px;margin:0 auto;line-height:1.6;}
+
+/* ── HOW IT WORKS ── */
+.how-section{margin-bottom:60px;}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.how-card{background:white;border:1px solid rgba(78,205,196,0.14);border-radius:20px;padding:26px 22px;box-shadow:var(--card-s);transition:all 0.25s cubic-bezier(0.34,1.2,0.64,1);position:relative;overflow:hidden;}
+.how-card:hover{transform:translateY(-4px);box-shadow:var(--card-sh);border-color:rgba(78,205,196,0.28);}
+.how-num{font-size:52px;font-weight:900;letter-spacing:-2px;line-height:1;background:linear-gradient(135deg,rgba(78,205,196,0.15),rgba(37,211,102,0.1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;}
+.how-ico{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:var(--teal-bg);border:1px solid rgba(78,205,196,0.2);transition:transform 0.22s;}
+.how-card:hover .how-ico{transform:scale(1.08) rotate(4deg);}
+.how-name{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:6px;letter-spacing:-0.2px;}
+.how-desc{font-size:12.5px;color:var(--gray);line-height:1.6;}
+
+/* ── PLANS ── */
+.plans-section{margin-bottom:60px;}
+.plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;max-width:920px;margin:0 auto;}
+.plan-card{background:white;border:1px solid rgba(78,205,196,0.15);border-radius:20px;padding:28px 22px;box-shadow:var(--card-s);transition:all 0.25s cubic-bezier(0.34,1.2,0.64,1);position:relative;}
+.plan-card:hover{transform:translateY(-4px);box-shadow:var(--card-sh);border-color:rgba(37,211,102,0.3);}
+.plan-card.popular{border-color:rgba(37,211,102,0.35);background:linear-gradient(135deg,rgba(37,211,102,0.04),rgba(78,205,196,0.03));}
+.plan-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));color:white;font-size:9px;font-weight:800;letter-spacing:1px;padding:4px 14px;border-radius:100px;white-space:nowrap;font-family:'JetBrains Mono',monospace;box-shadow:0 4px 14px rgba(37,211,102,0.35);}
+.plan-name{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
+.plan-price{font-size:36px;font-weight:900;color:var(--dark);letter-spacing:-1.5px;margin:10px 0 4px;}
+.plan-price sub{font-size:14px;font-weight:500;color:var(--gray);letter-spacing:0;}
+.plan-limit{font-size:11.5px;color:var(--wa-green-d);font-weight:700;margin-bottom:18px;padding:5px 10px;background:rgba(37,211,102,0.1);border-radius:8px;display:inline-block;font-family:'JetBrains Mono',monospace;border:1px solid rgba(37,211,102,0.2);}
+.plan-features{list-style:none;margin-bottom:22px;}
+.plan-features li{font-size:12.5px;color:var(--gray);padding:6px 0;border-bottom:1px solid rgba(78,205,196,0.12);display:flex;gap:8px;align-items:center;}
+.plan-features li:last-child{border:none;}
+.plan-features li::before{content:'✓';color:var(--wa-green);font-weight:700;flex-shrink:0;}
+.plan-btn{width:100%;padding:11px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;transition:all 0.22s;}
+.plan-btn-free{background:rgba(78,205,196,0.1);color:var(--teal-d);border:1px solid rgba(78,205,196,0.2);}
+.plan-btn-free:hover{background:rgba(78,205,196,0.18);}
+.plan-btn-paid{background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));color:white;box-shadow:0 4px 16px rgba(37,211,102,0.3);}
+.plan-btn-paid:hover{opacity:.9;transform:translateY(-1px);}
+
+/* ── GUIDE ── */
+.guide-section{margin-bottom:60px;}
+.guide-wrap{max-width:820px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.guide-block{background:white;border:1px solid rgba(78,205,196,0.15);border-radius:20px;padding:28px;box-shadow:var(--card-s);}
+.guide-block h3{font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;color:var(--dark);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.guide-block ol,.guide-block ul{padding-left:18px;}
+.guide-block li{font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:5px;}
+.guide-block li strong{color:var(--dark);}
+.code-pill{display:inline-block;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.25);border-radius:6px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal-d);margin-top:10px;}
+
+/* ── CONNECT CTA ── */
+.cta-section{margin-bottom:60px;}
+.cta-card{background:linear-gradient(135deg,var(--wa-green) 0%,var(--wa-green-d) 55%,var(--teal-d) 100%);border-radius:28px;padding:52px 40px;text-align:center;position:relative;overflow:hidden;box-shadow:0 16px 48px rgba(37,211,102,0.3);}
+.cta-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,255,255,0.12) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(78,205,196,0.2) 0%,transparent 40%);pointer-events:none;}
+.cta-label{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.8);font-family:'JetBrains Mono',monospace;margin-bottom:14px;padding:4px 12px;background:rgba(255,255,255,0.15);border-radius:100px;border:1px solid rgba(255,255,255,0.25);}
+.cta-title{font-size:clamp(26px,5vw,42px);font-weight:900;color:white;letter-spacing:-1.5px;margin-bottom:10px;line-height:1.1;}
+.cta-sub{font-size:15px;color:rgba(255,255,255,0.82);margin-bottom:28px;line-height:1.6;max-width:380px;margin-left:auto;margin-right:auto;}
+.btn-white{display:inline-flex;align-items:center;gap:8px;padding:14px 34px;border-radius:16px;border:none;background:white;color:var(--wa-green-d);font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1);box-shadow:0 6px 24px rgba(0,0,0,0.15);text-decoration:none;letter-spacing:-0.2px;}
+.btn-white:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 36px rgba(0,0,0,0.2);}
+
+/* ── OWNER ── */
+.owner-section{margin-bottom:60px;}
+.owner-card{background:white;border:1px solid rgba(78,205,196,0.15);border-radius:24px;padding:36px 32px;box-shadow:var(--card-s);display:flex;align-items:flex-start;gap:28px;flex-wrap:wrap;position:relative;overflow:hidden;max-width:720px;margin:0 auto;}
+.owner-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--wa-green),var(--teal));border-radius:4px 0 0 4px;}
+.owner-avatar{width:80px;height:80px;border-radius:20px;overflow:hidden;background:linear-gradient(135deg,var(--wa-green),var(--teal-d));display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;border:2px solid rgba(78,205,196,0.2);box-shadow:0 8px 28px rgba(78,205,196,0.18);}
+.owner-info{flex:1;min-width:200px;}
+.owner-role{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--teal-d);font-family:'JetBrains Mono',monospace;margin-bottom:6px;}
+.owner-name{font-size:24px;font-weight:900;color:var(--dark);letter-spacing:-0.5px;margin-bottom:6px;}
+.owner-desc{font-size:13px;color:var(--gray);line-height:1.65;margin-bottom:14px;}
+.owner-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.owner-tag{font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:100px;font-family:'JetBrains Mono',monospace;background:var(--teal-bg);color:var(--teal-d);border:1px solid rgba(78,205,196,0.2);}
+.owner-links{display:flex;flex-direction:column;gap:8px;}
+.owner-link-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gray);}
+.owner-link-row a{color:var(--dark);text-decoration:none;font-weight:600;}
+.owner-link-row a:hover{color:var(--wa-green-d);}
+
+/* ── BUY POPUP ── */
+.wa-popup{display:none;position:fixed;inset:0;z-index:200;background:rgba(26,46,46,0.55);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+.wa-popup.open{display:flex;}
+.wa-popup-box{background:white;border:1px solid rgba(78,205,196,0.2);border-radius:24px;padding:40px;max-width:400px;width:90%;text-align:center;animation:fadeUp .3s ease;box-shadow:0 24px 64px rgba(78,205,196,0.2);}
+.wa-popup-box h3{font-size:22px;font-weight:900;color:var(--dark);margin-bottom:8px;letter-spacing:-0.5px;}
+.wa-popup-box p{font-size:13.5px;color:var(--gray);margin-bottom:24px;line-height:1.65;}
+.wa-popup-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));color:white;font-weight:800;font-size:14px;padding:13px 28px;border-radius:14px;text-decoration:none;transition:all 0.22s;font-family:'Nunito',sans-serif;box-shadow:0 4px 18px rgba(37,211,102,0.32);}
+.wa-popup-btn:hover{opacity:.9;transform:translateY(-2px);}
+.wa-popup-close{display:block;margin-top:14px;font-size:13px;color:var(--gray);cursor:pointer;background:none;border:none;font-family:'Nunito',sans-serif;font-weight:600;}
+.wa-popup-close:hover{color:var(--dark);}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid rgba(78,205,196,0.15);padding:32px 0 0;text-align:center;position:relative;z-index:1;}
+.footer-inner{max-width:1000px;margin:0 auto;padding:0 22px;}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;}
+.footer-name{font-size:14px;font-weight:900;color:var(--dark);}
+.footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:14px;}
+.footer-links a{font-size:12px;color:var(--gray-l);text-decoration:none;font-weight:600;font-family:'JetBrains Mono',monospace;transition:color .2s;}
+.footer-links a:hover{color:var(--teal-d);}
+.footer-copy{margin-top:0;padding:16px 0;border-top:1px solid rgba(78,205,196,0.1);font-size:10.5px;color:var(--gray-l);font-family:'JetBrains Mono',monospace;}
+
+/* ── MOBILE MENU DRAWER ── */
+.overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.3s ease;will-change:background;}
+.overlay.open{background:rgba(26,46,46,0.4);pointer-events:auto;backdrop-filter:blur(3px);}
+.side-menu{position:fixed;top:0;left:0;bottom:0;z-index:100;width:270px;background:rgba(240,252,251,0.97);backdrop-filter:blur(32px) saturate(180%);border-right:1px solid rgba(78,205,196,0.2);box-shadow:8px 0 48px rgba(78,205,196,0.12);transform:translate3d(-100%,0,0);transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow:hidden;}
+.side-menu.open{transform:translate3d(0,0,0);}
+.sm-head{padding:28px 20px 18px;border-bottom:1px solid rgba(78,205,196,0.15);display:flex;align-items:center;gap:12px;position:relative;}
+.sm-logo-ico{width:40px;height:40px;border-radius:12px;overflow:hidden;border:1.5px solid rgba(78,205,196,0.3);box-shadow:0 4px 14px rgba(78,205,196,0.2);flex-shrink:0;}
+.sm-logo-ico img{width:100%;height:100%;object-fit:cover;display:block;}
+.sm-brand{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--teal-d);margin-bottom:2px;}
+.sm-title{font-size:15px;font-weight:900;letter-spacing:-0.3px;color:var(--dark);}
+.sm-close{position:absolute;top:18px;right:16px;width:28px;height:28px;border-radius:50%;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.2);color:var(--gray);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s;}
+.sm-close:hover{background:rgba(78,205,196,0.2);color:var(--dark);}
+.sm-nav{padding:14px 12px;flex:1;display:flex;flex-direction:column;gap:3px;}
+.sm-btn{display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:12px;background:none;border:none;width:100%;color:var(--gray);font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;transition:all 0.18s;text-align:left;}
+.sm-btn:hover{background:rgba(78,205,196,0.1);color:var(--dark);transform:translateX(3px);}
+.sm-ico{font-size:18px;width:24px;text-align:center;}
+.sm-lbl{flex:1;}
+.sm-arr{font-size:11px;color:var(--teal);}
+.sm-sep{height:1px;background:rgba(78,205,196,0.15);margin:6px 12px;}
+.sm-footer{padding:14px 18px;border-top:1px solid rgba(78,205,196,0.15);text-align:center;font-size:9px;color:var(--gray-l);font-family:'JetBrains Mono',monospace;}
+
+/* ── DIVIDER ── */
+.divider{width:100%;max-width:160px;height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);margin:0 auto 64px;opacity:.5;}
+
+/* ── BANNER SLIDESHOW ── */
+.banner-wrap{width:100%;max-width:900px;margin:0 auto 56px;position:relative;border-radius:22px;overflow:hidden;box-shadow:0 12px 48px rgba(78,205,196,0.22);aspect-ratio:16/7;}
+.banner-slide{position:absolute;inset:0;opacity:0;transition:opacity 0.7s ease;}
+.banner-slide.active{opacity:1;z-index:1;}
+.banner-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+.banner-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5;}
+.banner-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer;transition:all 0.25s;border:none;padding:0;}
+.banner-dot.active{background:white;width:22px;border-radius:4px;}
+.banner-prev,.banner-next{position:absolute;top:50%;transform:translateY(-50%);z-index:5;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,0.28);backdrop-filter:blur(8px);color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.banner-prev{left:12px;}
+.banner-next{right:12px;}
+.banner-prev:hover,.banner-next:hover{background:rgba(255,255,255,0.5);}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.55s ease,transform 0.55s cubic-bezier(0.34,1.2,0.64,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--teal-bg2);}
+::-webkit-scrollbar-thumb{background:var(--teal-xl);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--teal);}
+
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .nav-menu-btn{display:flex;}
+  .guide-wrap{grid-template-columns:1fr;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+  .owner-card{flex-direction:column;align-items:flex-start;}
+  .footer-links{gap:14px;}
+  .cta-card{padding:36px 22px;}
+  .hero{padding:60px 5% 48px;}
+  .auth-modal-body{padding:22px 20px 26px;}
+  .auth-modal-header{padding:24px 24px 20px;}
+}
+@media(max-width:480px){
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+  .plans-grid{grid-template-columns:1fr;}
+  .auth-plan-select{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- SIDE MENU -->
+<nav class="side-menu" id="sideMenu">
+  <div class="sm-head">
+    <div class="sm-logo-ico"><img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT"></div>
+    <div>
+      <div class="sm-brand">Black Cat Ofc</div>
+      <div class="sm-title">Mezuka OPT</div>
+    </div>
+    <button class="sm-close" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="sm-nav">
+    <button class="sm-btn" onclick="navigate('#how')">
+      <span class="sm-ico">⚙️</span><span class="sm-lbl">How It Works</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" onclick="navigate('#plans')">
+      <span class="sm-ico">💎</span><span class="sm-lbl">Plans</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" onclick="navigate('#guide')">
+      <span class="sm-ico">📖</span><span class="sm-lbl">Guide</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" onclick="navigate('#owner')">
+      <span class="sm-ico">👤</span><span class="sm-lbl">Owner</span><span class="sm-arr">›</span>
+    </button>
+    <div class="sm-sep"></div>
+    <button class="sm-btn" onclick="navigate('connect.html')">
+      <span class="sm-ico">🚀</span><span class="sm-lbl">Add Your Website</span><span class="sm-arr">›</span>
+    </button>
+    <div class="sm-sep"></div>
+    <button class="sm-btn" id="smSignupBtn" onclick="closeMenu();openAuthModal('signup')">
+      <span class="sm-ico">✨</span><span class="sm-lbl">Sign Up</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" id="smLoginBtn" onclick="closeMenu();openAuthModal('login')">
+      <span class="sm-ico">🔑</span><span class="sm-lbl">Sign In</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" id="smProfileBtn" onclick="closeMenu();window.location.href='connect.html'" style="display:none;">
+      <span class="sm-ico">👤</span><span class="sm-lbl">My Profile</span><span class="sm-arr">›</span>
+    </button>
+  </div>
+  <div class="sm-footer">Powered by <span style="color:var(--teal-d);font-weight:700;">Mezuka OPT</span><br>by Black Cat Ofc</div>
+</nav>
+
+<!-- NAV -->
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="nav-menu-btn" onclick="openMenu()"><span></span><span></span><span></span></button>
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon"><img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT"></div>
+      <span class="nav-brand">Mezuka <span>OPT</span></span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#plans">Plans</a>
+    <a href="#guide">Guide</a>
+    <a href="#owner">Owner</a>
+    <a href="connect.html" class="nav-cta">Add Your Website →</a>
+  </div>
+
+  <!-- Auth area -->
+  <div class="nav-profile-area">
+    <!-- Guest buttons -->
+    <div id="guestButtons" style="display:flex;gap:6px;align-items:center;">
+      <button class="nav-auth-btn nav-signin-btn" onclick="openAuthModal('login')">Sign In</button>
+      <button class="nav-auth-btn nav-signup-btn" onclick="openAuthModal('signup')">Sign Up</button>
+    </div>
+    <!-- Profile icon (shown when logged in) -->
+    <div id="profileArea" style="display:none;" class="profile-wrapper">
+      <button class="profile-avatar-btn" id="profileAvatarBtn" onclick="toggleProfileDropdown()">
+        <span id="profileInitial">N</span>
+      </button>
+      <div class="profile-dropdown" id="profileDropdown" style="display:none;">
+        <div class="profile-dropdown-head">
+          <div class="profile-dropdown-avatar" id="profileDropdownAvatar">😊</div>
+          <div class="profile-dropdown-name" id="profileDropdownName">Loading…</div>
+          <div class="profile-dropdown-email" id="profileDropdownEmail">-</div>
+          <div class="profile-dropdown-plan" id="profileDropdownPlan">FREE</div>
+        </div>
+        <div class="profile-dropdown-body">
+          <div class="profile-stat-row">
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="profileTodayUsed">-</div>
+              <div class="profile-stat-label">Used Today</div>
+            </div>
+            <div class="profile-stat">
+              <div class="profile-stat-num" id="profileDailyLimit">-</div>
+              <div class="profile-stat-label">Daily Limit</div>
+            </div>
+          </div>
+          <div class="profile-site-info">
+            <div class="profile-site-label">Connected Website</div>
+            <div class="profile-site-name" id="profileSiteName">-</div>
+            <div class="profile-site-url" id="profileSiteUrl">-</div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <div class="profile-site-label" style="margin-bottom:6px;">Your API Key</div>
+            <div class="profile-api-row">
+              <span class="profile-api-val" id="profileApiKey">••••••••••••••••••</span>
+              <button class="profile-api-copy" onclick="copyProfileApiKey()">Copy</button>
+            </div>
+          </div>
+          <div class="profile-dropdown-actions">
+            <button class="profile-action-btn go-connect" onclick="window.location.href='connect.html'">
+              🌐 Manage Website
+            </button>
+            <button class="profile-action-btn logout-btn" onclick="doLogout()">
+              🚪 Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="connect.html" class="btn-primary" style="display:none;padding:8px 16px;font-size:12px;border-radius:10px;" id="nav-cta-mobile">🚀 Add Site</a>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════
+     AUTH MODAL  (Sign Up / Sign In)
+════════════════════════════════════════════════════════════ -->
+<div class="auth-modal-overlay" id="authModalOverlay">
+  <div class="auth-modal">
+    <div class="auth-modal-header">
+      <button class="auth-modal-close" onclick="closeAuthModal()">✕</button>
+      <div class="auth-modal-logo">
+        <img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT">
+      </div>
+      <div class="auth-modal-title" id="authModalTitle">Welcome Back</div>
+      <div class="auth-modal-sub" id="authModalSub">Sign in to your Mezuka OPT account</div>
+      <div class="auth-tab-row">
+        <button class="auth-tab" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+        <button class="auth-tab" id="tabSignup" onclick="switchAuthTab('signup')">Sign Up</button>
+      </div>
+    </div>
+    <div class="auth-modal-body">
+
+      <!-- ══════════════════════════════════════
+           LOGIN PANEL
+      ══════════════════════════════════════ -->
+      <div class="auth-form-panel" id="loginPanel">
+        <div class="auth-msg" id="loginMsg"></div>
+
+        <!-- OAuth buttons -->
+        <a href="/auth/github?from=main" class="oauth-btn oauth-github">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          Continue with GitHub
+        </a>
+        <a href="/auth/google?from=main" class="oauth-btn oauth-google">
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </a>
+
+        <div class="oauth-divider"><span>or sign in with WhatsApp</span></div>
+
+        <!-- WhatsApp login -->
+        <div class="auth-field">
+          <label class="auth-label">WhatsApp Number</label>
+          <div class="auth-input-row">
+            <input type="tel" class="auth-input" id="loginPhone" placeholder="94712345678" inputmode="numeric"/>
+            <button class="auth-otp-btn" id="loginSendOtpBtn" onclick="loginSendOtp()">Send OTP</button>
+          </div>
+        </div>
+        <div class="auth-field auth-otp-large" id="loginOtpField" style="display:none;">
+          <label class="auth-label">Enter OTP <span style="color:var(--wa-green-d);font-size:9px;font-weight:600;text-transform:none;letter-spacing:0;font-family:'Nunito',sans-serif;">sent to your WhatsApp</span></label>
+          <input type="text" class="auth-input" id="loginOtp" placeholder="· · · · · ·" maxlength="6" inputmode="numeric"/>
+        </div>
+        <button class="auth-submit-btn" id="loginBtn" onclick="doLogin()">📲 Sign In with WhatsApp</button>
+
+        <div class="auth-divider"></div>
+        <div class="auth-switch">Don't have an account? <a onclick="switchAuthTab('signup')">Sign Up →</a></div>
+      </div>
+
+      <!-- ══════════════════════════════════════
+           SIGNUP PANEL
+      ══════════════════════════════════════ -->
+      <div class="auth-form-panel" id="signupPanel">
+
+        <!-- ── STEP 1: Choose method ── -->
+        <div class="signup-step active" id="signupStep1">
+          <div class="auth-msg" id="signupMsg1"></div>
+          <div style="font-size:13px;font-weight:800;color:var(--dark);margin-bottom:14px;text-align:center;">Choose how to sign up</div>
+
+          <a href="/auth/github?from=main" class="oauth-btn oauth-github">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Sign up with GitHub
+          </a>
+          <a href="/auth/google?from=main" class="oauth-btn oauth-google" style="margin-top:10px;">
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+            Sign up with Google
+          </a>
+
+          <div class="oauth-divider" style="margin-top:14px;"><span>or sign up with WhatsApp</span></div>
+
+          <div class="auth-field">
+            <label class="auth-label">Full Name</label>
+            <input type="text" class="auth-input" id="suName" placeholder="Your name"/>
+          </div>
+          <div class="auth-field">
+            <label class="auth-label">WhatsApp Number</label>
+            <div class="auth-input-row">
+              <input type="tel" class="auth-input" id="suPhone" placeholder="94712345678" inputmode="numeric"/>
+              <button class="auth-otp-btn" id="suSendOtpBtn" onclick="suSendOtp()">Send OTP</button>
+            </div>
+          </div>
+          <div class="auth-field auth-otp-large" id="suOtpField" style="display:none;">
+            <label class="auth-label">Enter OTP <span style="color:var(--wa-green-d);font-size:9px;font-weight:600;text-transform:none;letter-spacing:0;font-family:'Nunito',sans-serif;">sent to your WhatsApp</span></label>
+            <input type="text" class="auth-input" id="suOtp" placeholder="· · · · · ·" maxlength="6" inputmode="numeric"/>
+          </div>
+          <button class="auth-submit-btn" id="suStep1Btn" onclick="suGoStep2()">📲 Verify & Continue →</button>
+          <div class="auth-divider"></div>
+          <div class="auth-switch">Already have an account? <a onclick="switchAuthTab('login')">Sign In →</a></div>
+        </div>
+
+        <!-- ── STEP 2: Plan select ── -->
+        <div class="signup-step" id="signupStep2">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;cursor:pointer;" onclick="suBackStep()">
+            <span style="font-size:18px;">←</span>
+            <span style="font-size:12px;font-weight:700;color:var(--gray);">Back</span>
+          </div>
+          <div class="auth-msg" id="signupMsg2"></div>
+          <div style="font-size:14px;font-weight:800;color:var(--dark);margin-bottom:14px;">Choose Your Plan</div>
+          <div class="auth-plan-select">
+            <div class="auth-plan-opt selected" id="ap_free" onclick="suSelectPlan('free')">
+              <div class="auth-plan-name">🆓 Free</div>
+              <div class="auth-plan-limit">50 OTPs/day</div>
+              <div class="auth-plan-price">$0/mo</div>
+            </div>
+            <div class="auth-plan-opt" id="ap_starter" onclick="suSelectPlan('starter')">
+              <div class="auth-plan-name">⚡ Starter</div>
+              <div class="auth-plan-limit">80 OTPs/day</div>
+              <div class="auth-plan-price">$5/mo</div>
+            </div>
+            <div class="auth-plan-opt" id="ap_pro" onclick="suSelectPlan('pro')" style="position:relative;">
+              <div class="auth-plan-badge">POPULAR</div>
+              <div class="auth-plan-name">🚀 Pro</div>
+              <div class="auth-plan-limit">150 OTPs/day</div>
+              <div class="auth-plan-price">$12/mo</div>
+            </div>
+            <div class="auth-plan-opt" id="ap_unlimited" onclick="suSelectPlan('unlimited')">
+              <div class="auth-plan-name">♾️ Unlimited</div>
+              <div class="auth-plan-limit">Unlimited</div>
+              <div class="auth-plan-price">$25/mo</div>
+            </div>
+          </div>
+          <div id="suPaidNotice" style="display:none;background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.2);border-radius:11px;padding:12px 14px;font-size:12px;color:var(--gray);margin-bottom:14px;line-height:1.6;">
+            💬 After registering, WhatsApp <a href="https://wa.me/94721584279" target="_blank" style="color:var(--wa-green-d);font-weight:700;">Nimeshka (+94 721 584 279)</a> to activate your paid plan.
+          </div>
+          <div class="auth-privacy-row">
+            <input type="checkbox" id="suPrivacy"/>
+            <label for="suPrivacy">I agree to the <a href="#" onclick="event.preventDefault()" style="color:var(--teal-d);font-weight:700;">Privacy Policy</a> and how my data is used by Mezuka OPT Service.</label>
+          </div>
+          <button class="auth-submit-btn" id="suStep2Btn" onclick="suRegister()">✅ Create Account →</button>
+        </div>
+
+        <!-- ── STEP 3: Success ── -->
+        <div class="signup-step" id="signupStep3">
+          <div style="text-align:center;padding:10px 0;">
+            <div style="font-size:60px;margin-bottom:14px;">🎉</div>
+            <div style="font-size:20px;font-weight:900;color:var(--dark);letter-spacing:-0.5px;margin-bottom:8px;">Account Created!</div>
+            <div style="font-size:13px;color:var(--gray);line-height:1.6;margin-bottom:22px;">You're all set! Your API key is ready. You can view it anytime from your profile.</div>
+            <button class="auth-submit-btn" onclick="closeAuthModal()">🚀 Go to Dashboard</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── BUY POPUP ── -->
+<div class="wa-popup" id="buyPopup">
+  <div class="wa-popup-box">
+    <h3>🚀 Upgrade Plan</h3>
+    <p id="popupPlanText">Loading…</p>
+    <a class="wa-popup-btn" id="popupWaLink" href="#" target="_blank">💬 Message on WhatsApp</a>
+    <button class="wa-popup-close" onclick="closeBuyPopup()">✕ Close</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pill"><span class="hero-pill-dot"></span>WhatsApp OTP Verification Service</div>
+  <div style="width:100px;height:100px;border-radius:26px;overflow:hidden;border:3px solid rgba(78,205,196,0.25);box-shadow:0 20px 60px rgba(78,205,196,0.28),0 4px 20px rgba(0,0,0,0.06);margin:0 auto 24px;animation:logoPop 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;">
+    <img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  <div class="hero-eyebrow">Black Cat Ofc Presents</div>
+  <h1 class="hero-title">Verify Users via<br/><span>WhatsApp OTP</span></h1>
+  <p class="hero-sub">Add powerful WhatsApp OTP verification to any website in minutes. No complex setup. Just plug in our API and go.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="openAuthModal('signup')">✨ Get Started Free →</button>
+    <a href="#guide" class="btn-ghost">📖 View Guide</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Free Daily OTPs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">3s</div>
+      <div class="stat-label">Avg Delivery</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Plans Available</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Websites Supported</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ── BANNERS ── -->
+  <div class="banner-wrap reveal">
+    <div class="banner-slide active"><img src="https://files.catbox.moe/4mp4ry.jpg" alt="Banner 1" loading="eager"></div>
+    <div class="banner-slide"><img src="https://files.catbox.moe/92o54h.jpg" alt="Banner 2" loading="lazy"></div>
+    <div class="banner-slide"><img src="https://files.catbox.moe/1q8qfz.jpg" alt="Banner 3" loading="lazy"></div>
+    <button class="banner-prev" onclick="bannerMove(-1)">‹</button>
+    <button class="banner-next" onclick="bannerMove(1)">›</button>
+    <div class="banner-dots">
+      <button class="banner-dot active" onclick="bannerGo(0)"></button>
+      <button class="banner-dot" onclick="bannerGo(1)"></button>
+      <button class="banner-dot" onclick="bannerGo(2)"></button>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="how-section reveal" id="how">
+    <div class="sec-hd">
+      <div class="sec-pill">⚙️ Process</div>
+      <h2 class="sec-title">How It Works</h2>
+      <p class="sec-sub">Four simple steps to add WhatsApp OTP to your website.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <div class="how-ico">✨</div>
+        <div class="how-name">Sign Up Free</div>
+        <div class="how-desc">Create your account, verify via WhatsApp OTP, and get your unique API key instantly.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <div class="how-ico">📋</div>
+        <div class="how-name">Copy Snippet</div>
+        <div class="how-desc">Paste our one-line HTML snippet into your website's body tag. That's it.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <div class="how-ico">📲</div>
+        <div class="how-name">Users Verify</div>
+        <div class="how-desc">Your users enter their WhatsApp number. They receive a 6-digit OTP instantly.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">04</div>
+        <div class="how-ico">🔐</div>
+        <div class="how-name">Secure & Done</div>
+        <div class="how-desc">OTP verified, access token issued. Your site knows the user is legitimate.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── PLANS ── -->
+  <section class="plans-section reveal" id="plans">
+    <div class="sec-hd">
+      <div class="sec-pill">💎 Pricing</div>
+      <h2 class="sec-title">Simple, Transparent Plans</h2>
+      <p class="sec-sub">Start free. Scale when you need more OTPs per day.</p>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">🆓 FREE</div>
+        <div class="plan-price">$0<sub>/mo</sub></div>
+        <div class="plan-limit">50 OTPs / day</div>
+        <ul class="plan-features">
+          <li>50 WhatsApp OTPs daily</li>
+          <li>1 website connection</li>
+          <li>API key access</li>
+          <li>Basic support</li>
+        </ul>
+        <button class="plan-btn plan-btn-free" onclick="openAuthModal('signup')">Get Started Free</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">⚡ STARTER</div>
+        <div class="plan-price">$5<sub>/mo</sub></div>
+        <div class="plan-limit">80 OTPs / day</div>
+        <ul class="plan-features">
+          <li>80 WhatsApp OTPs daily</li>
+          <li>1 website connection</li>
+          <li>Priority delivery</li>
+          <li>Standard support</li>
+        </ul>
+        <button class="plan-btn plan-btn-paid" onclick="openBuyPopup('Starter – $5/mo (80 OTPs/day)')">Buy Starter →</button>
+      </div>
+      <div class="plan-card popular">
+        <div class="plan-badge">⭐ POPULAR</div>
+        <div class="plan-name">🚀 PRO</div>
+        <div class="plan-price">$12<sub>/mo</sub></div>
+        <div class="plan-limit">150 OTPs / day</div>
+        <ul class="plan-features">
+          <li>150 WhatsApp OTPs daily</li>
+          <li>Multiple websites</li>
+          <li>Priority delivery</li>
+          <li>Fast support</li>
+        </ul>
+        <button class="plan-btn plan-btn-paid" onclick="openBuyPopup('Pro – $12/mo (150 OTPs/day)')">Buy Pro →</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">♾️ UNLIMITED</div>
+        <div class="plan-price">$25<sub>/mo</sub></div>
+        <div class="plan-limit">Unlimited OTPs</div>
+        <ul class="plan-features">
+          <li>No daily OTP limit</li>
+          <li>Unlimited websites</li>
+          <li>Instant delivery</li>
+          <li>Premium support</li>
+        </ul>
+        <button class="plan-btn plan-btn-paid" onclick="openBuyPopup('Unlimited – $25/mo (Unlimited OTPs)')">Buy Unlimited →</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ── GUIDE ── -->
+  <section class="guide-section reveal" id="guide">
+    <div class="sec-hd">
+      <div class="sec-pill">📖 Guide</div>
+      <h2 class="sec-title">Quick Start Guide</h2>
+      <p class="sec-sub">Everything you need to integrate WhatsApp OTP in minutes.</p>
+    </div>
+    <div class="guide-wrap">
+      <div class="guide-block">
+        <h3>🚀 Setup Steps</h3>
+        <ol>
+          <li>Sign up with your name, email, website URL</li>
+          <li>Verify your WhatsApp number via OTP</li>
+          <li>Your <strong>API key</strong> is auto-generated</li>
+          <li>Copy the provided HTML snippet</li>
+          <li>Paste it into your website</li>
+        </ol>
+        <div class="code-pill">GET /api/requestotp/:phone</div>
+      </div>
+      <div class="guide-block">
+        <h3>📡 API Endpoints</h3>
+        <ul>
+          <li><strong>Send OTP:</strong> GET /api/sendotp/:apiKey/:phone</li>
+          <li><strong>Verify OTP:</strong> GET /api/verifyopt/:apiKey/:phone/:otp</li>
+          <li><strong>Refresh Token:</strong> POST /api/refresh</li>
+          <li><strong>Check Status:</strong> GET /api/optstatus/:phone</li>
+          <li><strong>Opt Out:</strong> GET /api/optout/:phone</li>
+          <li><strong>Health Check:</strong> GET /api/health</li>
+        </ul>
+      </div>
+      <div class="guide-block">
+        <h3>⚙️ How OTP Works</h3>
+        <ol>
+          <li>User enters their <strong>WhatsApp number</strong></li>
+          <li>Your site calls our <strong>API</strong> with their number</li>
+          <li>We send a <strong>6-digit OTP</strong> via WhatsApp</li>
+          <li>User enters OTP — we verify it</li>
+          <li>We return an <strong>Access + Refresh Token</strong></li>
+          <li>Use tokens for authenticated requests</li>
+        </ol>
+      </div>
+      <div class="guide-block">
+        <h3>🔐 Security Features</h3>
+        <ul>
+          <li>OTP expires in <strong>5 minutes</strong></li>
+          <li>Max <strong>5 attempts</strong> per OTP</li>
+          <li><strong>60s cooldown</strong> between requests</li>
+          <li>Access tokens expire in <strong>15 minutes</strong></li>
+          <li>Refresh tokens last <strong>30 days</strong></li>
+          <li>All hashed with <strong>SHA-256</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <section class="cta-section reveal">
+    <div class="cta-card">
+      <div class="cta-label">🔗 Quick Setup</div>
+      <h2 class="cta-title">Add OTP in 60 Seconds</h2>
+      <p class="cta-sub">Connect your website and start sending WhatsApp OTPs instantly — no complex setup needed.</p>
+      <button class="btn-white" onclick="openAuthModal('signup')">✨ Sign Up Free →</button>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OWNER -->
+  <section class="owner-section reveal" id="owner">
+    <div class="sec-hd">
+      <div class="sec-pill">👤 Team</div>
+      <h2 class="sec-title">Meet the Owner</h2>
+    </div>
+    <div class="owner-card">
+      <div class="owner-avatar">😺</div>
+      <div class="owner-info">
+        <div class="owner-role">Founder & Developer</div>
+        <div class="owner-name">Nimeshka Mihiran</div>
+        <div class="owner-desc">Building powerful WhatsApp automation tools for developers and businesses across Sri Lanka and beyond. Mezuka OPT Service is designed to make WhatsApp verification simple, reliable, and affordable for everyone.</div>
+        <div class="owner-tags">
+          <span class="owner-tag">🐱 Black Cat Ofc</span>
+          <span class="owner-tag">Developer</span>
+          <span class="owner-tag">Mezuka OPT</span>
+        </div>
+        <div class="owner-links">
+          <div class="owner-link-row">
+            <span>📱</span>
+            <a href="https://wa.me/94721584279" target="_blank">+94 721 584 279</a>
+          </div>
+          <div class="owner-link-row">
+            <span>💬</span>
+            <a href="https://wa.me/94721584279?text=Hi%20Nimeshka!" target="_blank">Message on WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div style="width:30px;height:30px;border-radius:9px;overflow:hidden;"><img src="https://files.catbox.moe/6fbu99.jpg" alt="logo" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="footer-name">Mezuka OPT Service</div>
+    </div>
+    <div class="footer-links">
+      <a href="#how">How It Works</a>
+      <a href="#plans">Plans</a>
+      <a href="#guide">Guide</a>
+      <a href="#owner">Owner</a>
+      <a href="connect.html">Add Website</a>
+      <a href="https://wa.me/94721584279" target="_blank">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Mezuka OPT Service · Black Cat Ofc · made by nimeshka mihiran</div>
+  </div>
+</footer>
+
+<script>
+const API_BASE = '';
+
+// ══════════════════════════════════════════════════════════════════════
+//  SESSION STORAGE helpers
+// ══════════════════════════════════════════════════════════════════════
+function saveSession(data) {
+  localStorage.setItem('mezuka_user', JSON.stringify(data));
+}
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('mezuka_user')); } catch { return null; }
+}
+function clearSession() {
+  localStorage.removeItem('mezuka_user');
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  AUTH MODAL
+// ══════════════════════════════════════════════════════════════════════
+function openAuthModal(tab='login') {
+  document.getElementById('authModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  switchAuthTab(tab);
+}
+function closeAuthModal() {
+  document.getElementById('authModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('authModalOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeAuthModal();
+});
+
+function switchAuthTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('tabLogin').classList.toggle('active', isLogin);
+  document.getElementById('tabSignup').classList.toggle('active', !isLogin);
+  document.getElementById('loginPanel').classList.toggle('active', isLogin);
+  document.getElementById('signupPanel').classList.toggle('active', !isLogin);
+  document.getElementById('authModalTitle').textContent = isLogin ? 'Welcome Back' : 'Create Account';
+  document.getElementById('authModalSub').textContent = isLogin ? 'Sign in to your Mezuka OPT account' : 'Join Mezuka OPT Service for free';
+}
+
+// ── SHOW AUTH MSG ──
+function showAuthMsg(id, type, text) {
+  const el = document.getElementById(id);
+  el.className = 'auth-msg ' + type + ' show';
+  el.textContent = (type === 'error' ? '⚠️ ' : '✅ ') + text;
+}
+function hideAuthMsg(id) { document.getElementById(id).classList.remove('show'); }
+
+// ══════════════════════════════════════════════════════════════════════
+//  LOGIN  –  WhatsApp OTP
+// ══════════════════════════════════════════════════════════════════════
+let loginOtpSent = false;
+
+async function loginSendOtp() {
+  const phone = document.getElementById('loginPhone').value.replace(/\D/g,'').trim();
+  if(!phone || phone.length < 7) { showAuthMsg('loginMsg','error','Enter a valid WhatsApp number.'); return; }
+  const btn = document.getElementById('loginSendOtpBtn');
+  btn.disabled = true; btn.textContent = 'Sending…'; hideAuthMsg('loginMsg');
+  try {
+    const res = await fetch(`${API_BASE}/api/requestotp/${phone}`);
+    const data = await res.json();
+    if(data.success) {
+      loginOtpSent = true;
+      document.getElementById('loginOtpField').style.display = 'block';
+      document.getElementById('loginOtp').focus();
+      showAuthMsg('loginMsg','success','OTP sent! Check your WhatsApp.');
+      startCooldown(btn, 60, 'loginSendOtp');
+    } else {
+      const msgs = {
+        COOLDOWN: `Wait ${data.retryAfterSeconds||60}s before requesting again.`,
+        SERVICE_UNAVAILABLE: 'OTP service not ready. Try again shortly.',
+        INVALID_PHONE: 'Invalid phone number format.'
+      };
+      showAuthMsg('loginMsg','error', msgs[data.error] || data.message || 'Failed to send OTP.');
+      btn.disabled = false; btn.textContent = 'Send OTP';
+    }
+  } catch {
+    showAuthMsg('loginMsg','error','Network error. Is the server running?');
+    btn.disabled = false; btn.textContent = 'Send OTP';
+  }
+}
+
+async function doLogin() {
+  const phone = document.getElementById('loginPhone').value.replace(/\D/g,'').trim();
+  const otp   = document.getElementById('loginOtp').value.replace(/\D/g,'').trim();
+  if(!phone || phone.length < 7) { showAuthMsg('loginMsg','error','Enter your WhatsApp number.'); return; }
+  if(!loginOtpSent) { showAuthMsg('loginMsg','error','Please send OTP first.'); return; }
+  if(otp.length !== 6) { showAuthMsg('loginMsg','error','Enter the 6-digit OTP.'); return; }
+
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.innerHTML = '<div class="auth-spinner"></div> Verifying…'; hideAuthMsg('loginMsg');
+  try {
+    const res = await fetch(`${API_BASE}/api/verifyotp/${phone}/${otp}`);
+    const data = await res.json();
+    if(!data.success) {
+      const msgs = {
+        INVALID_OTP: `Wrong OTP. ${data.attemptsRemaining||0} attempt(s) left.`,
+        OTP_NOT_FOUND: 'OTP expired. Please request a new one.',
+        TOO_MANY_ATTEMPTS: 'Too many wrong attempts. Request a new OTP.',
+        OTP_ALREADY_USED: 'OTP already used. Request a new one.'
+      };
+      showAuthMsg('loginMsg','error', msgs[data.error] || data.message || 'OTP verification failed.');
+      btn.disabled = false; btn.innerHTML = '📲 Sign In with WhatsApp'; return;
+    }
+    // Fetch user profile from DB
+    let userProfile = { phone, plan:'free', todayUsed:0, dailyLimit:50 };
+    try {
+      const pRes = await fetch(`${API_BASE}/api/profile/byphone/${phone}`, {
+        headers:{'Authorization':`Bearer ${data.accessToken}`}
+      });
+      if(pRes.ok){ const pData = await pRes.json(); if(pData.success) userProfile = {...userProfile, ...pData.user}; }
+    } catch{}
+    saveSession(userProfile);
+    closeAuthModal();
+    renderProfile(userProfile);
+    loginOtpSent = false;
+    btn.disabled = false; btn.innerHTML = '📲 Sign In with WhatsApp';
+  } catch {
+    showAuthMsg('loginMsg','error','Network error. Please try again.');
+    btn.disabled = false; btn.innerHTML = '📲 Sign In with WhatsApp';
+  }
+}
+
+document.getElementById('loginOtp').addEventListener('keypress', e => { if(e.key==='Enter') doLogin(); });
+
+// ══════════════════════════════════════════════════════════════════════
+//  SHARED COOLDOWN TIMER
+// ══════════════════════════════════════════════════════════════════════
+function startCooldown(btn, secs) {
+  let t = secs; btn.textContent = `Resend (${t}s)`;
+  const iv = setInterval(() => {
+    t--;
+    if(t <= 0){ clearInterval(iv); btn.disabled = false; btn.textContent = 'Resend OTP'; }
+    else btn.textContent = `Resend (${t}s)`;
+  }, 1000);
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  SIGNUP – WhatsApp OTP
+// ══════════════════════════════════════════════════════════════════════
+let suOtpSent = false, suAccessToken = null, suSelectedPlan = 'free';
+
+async function suSendOtp() {
+  const phone = document.getElementById('suPhone').value.replace(/\D/g,'').trim();
+  if(!phone || phone.length < 7) { showAuthMsg('signupMsg1','error','Enter a valid WhatsApp number.'); return; }
+  const btn = document.getElementById('suSendOtpBtn');
+  btn.disabled = true; btn.textContent = 'Sending…'; hideAuthMsg('signupMsg1');
+  try {
+    const res = await fetch(`${API_BASE}/api/requestotp/${phone}`);
+    const data = await res.json();
+    if(data.success) {
+      suOtpSent = true;
+      document.getElementById('suOtpField').style.display = 'block';
+      document.getElementById('suOtp').focus();
+      showAuthMsg('signupMsg1','success','OTP sent! Check your WhatsApp.');
+      startCooldown(btn, 60);
+    } else {
+      const msgs = {
+        COOLDOWN: `Wait ${data.retryAfterSeconds||60}s before requesting again.`,
+        SERVICE_UNAVAILABLE: 'OTP service not ready. Try again shortly.',
+        INVALID_PHONE: 'Invalid phone number format.'
+      };
+      showAuthMsg('signupMsg1','error', msgs[data.error] || data.message || 'Failed to send OTP.');
+      btn.disabled = false; btn.textContent = 'Send OTP';
+    }
+  } catch {
+    showAuthMsg('signupMsg1','error','Network error. Is the server running?');
+    btn.disabled = false; btn.textContent = 'Send OTP';
+  }
+}
+
+async function suGoStep2() {
+  const name  = document.getElementById('suName').value.trim();
+  const phone = document.getElementById('suPhone').value.replace(/\D/g,'').trim();
+  const otp   = document.getElementById('suOtp').value.replace(/\D/g,'').trim();
+
+  if(!name)  { showAuthMsg('signupMsg1','error','Please enter your name.'); return; }
+  if(!phone || phone.length < 7) { showAuthMsg('signupMsg1','error','Enter a valid WhatsApp number.'); return; }
+  if(!suOtpSent) { showAuthMsg('signupMsg1','error','Please send OTP first.'); return; }
+  if(otp.length !== 6) { showAuthMsg('signupMsg1','error','Enter the 6-digit OTP.'); return; }
+
+  const btn = document.getElementById('suStep1Btn');
+  btn.disabled = true; btn.innerHTML = '<div class="auth-spinner"></div> Verifying…'; hideAuthMsg('signupMsg1');
+
+  try {
+    const res = await fetch(`${API_BASE}/api/verifyotp/${phone}/${otp}`);
+    const data = await res.json();
+    if(!data.success) {
+      const msgs = {
+        INVALID_OTP: `Wrong OTP. ${data.attemptsRemaining||0} attempt(s) left.`,
+        OTP_NOT_FOUND: 'OTP expired. Please request a new one.',
+        TOO_MANY_ATTEMPTS: 'Too many wrong attempts. Request a new OTP.',
+        OTP_ALREADY_USED: 'OTP already used. Request a new one.'
+      };
+      showAuthMsg('signupMsg1','error', msgs[data.error] || data.message || 'OTP verification failed.');
+      btn.disabled = false; btn.innerHTML = '📲 Verify & Continue →'; return;
+    }
+    suAccessToken = data.accessToken;
+    window._suData = { name, phone };
+    btn.disabled = false; btn.innerHTML = '📲 Verify & Continue →';
+    document.getElementById('signupStep1').classList.remove('active');
+    document.getElementById('signupStep2').classList.add('active');
+  } catch {
+    showAuthMsg('signupMsg1','error','Network error. Please try again.');
+    btn.disabled = false; btn.innerHTML = '📲 Verify & Continue →';
+  }
+}
+
+function suSelectPlan(plan) {
+  suSelectedPlan = plan;
+  ['free','starter','pro','unlimited'].forEach(p => {
+    document.getElementById('ap_'+p).classList.toggle('selected', p === plan);
+  });
+  document.getElementById('suPaidNotice').style.display = plan === 'free' ? 'none' : 'block';
+}
+
+function suBackStep() {
+  document.getElementById('signupStep2').classList.remove('active');
+  document.getElementById('signupStep1').classList.add('active');
+}
+
+async function suRegister() {
+  if(!document.getElementById('suPrivacy').checked) {
+    showAuthMsg('signupMsg2','error','Please accept the Privacy Policy.'); return;
+  }
+  const btn = document.getElementById('suStep2Btn');
+  btn.disabled = true; btn.innerHTML = '<div class="auth-spinner"></div> Creating account…'; hideAuthMsg('signupMsg2');
+  try {
+    const res = await fetch(`${API_BASE}/api/register`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json','Authorization':`Bearer ${suAccessToken}`},
+      body: JSON.stringify({...window._suData, plan: suSelectedPlan})
+    });
+    const data = await res.json();
+    if(!data.success) {
+      showAuthMsg('signupMsg2','error', data.message || 'Registration failed. Try again.');
+      btn.disabled = false; btn.innerHTML = '✅ Create Account →'; return;
+    }
+    const userProfile = {
+      name:       window._suData.name,
+      phone:      window._suData.phone,
+      plan:       data.plan || suSelectedPlan,
+      apiKey:     data.apiKey,
+      dailyLimit: data.dailyLimit,
+      todayUsed:  0
+    };
+    saveSession(userProfile);
+    renderProfile(userProfile);
+    document.getElementById('signupStep2').classList.remove('active');
+    document.getElementById('signupStep3').classList.add('active');
+    btn.disabled = false; btn.innerHTML = '✅ Create Account →';
+    suOtpSent = false; suAccessToken = null; suSelectedPlan = 'free';
+    window._suData = null;
+  } catch {
+    showAuthMsg('signupMsg2','error','Network error. Please try again.');
+    btn.disabled = false; btn.innerHTML = '✅ Create Account →';
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════
+//  PROFILE
+// ══════════════════════════════════════════════════════════════════════
+function renderProfile(user) {
+  if(!user) return;
+  document.getElementById('guestButtons').style.display = 'none';
+  document.getElementById('profileArea').style.display = 'block';
+  document.getElementById('smSignupBtn').style.display = 'none';
+  document.getElementById('smLoginBtn').style.display = 'none';
+  document.getElementById('smProfileBtn').style.display = 'flex';
+
+  const initial = (user.name || 'U').charAt(0).toUpperCase();
+  document.getElementById('profileInitial').textContent = initial;
+  document.getElementById('profileDropdownAvatar').textContent = initial;
+  document.getElementById('profileDropdownName').textContent = user.name || '-';
+  document.getElementById('profileDropdownEmail').textContent = user.email || '-';
+  document.getElementById('profileDropdownPlan').textContent = (user.plan || 'free').toUpperCase();
+  document.getElementById('profileTodayUsed').textContent = user.todayUsed ?? 0;
+  document.getElementById('profileDailyLimit').textContent = user.dailyLimit === -1 ? '∞' : (user.dailyLimit ?? '-');
+  document.getElementById('profileSiteName').textContent = user.siteName || '(not set)';
+  document.getElementById('profileSiteUrl').textContent = user.siteUrl || '(not set)';
+  document.getElementById('profileApiKey').textContent = user.apiKey || '••••••••••••••••••';
+}
+
+function toggleProfileDropdown() {
+  const dd = document.getElementById('profileDropdown');
+  const isOpen = dd.style.display !== 'none';
+  dd.style.display = isOpen ? 'none' : 'block';
+  if(!isOpen) fetchTodayUsage();
+}
+
+async function fetchTodayUsage() {
+  const user = getSession();
+  if(!user || !user.apiKey) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/profile/usage?apiKey=${user.apiKey}`);
+    const data = await res.json();
+    if(data.success) {
+      document.getElementById('profileTodayUsed').textContent = data.todayUsed ?? 0;
+      user.todayUsed = data.todayUsed;
+      saveSession(user);
+    }
+  } catch {}
+}
+
+document.addEventListener('click', function(e) {
+  const wrapper = document.getElementById('profileArea');
+  if(wrapper && !wrapper.contains(e.target)) {
+    document.getElementById('profileDropdown').style.display = 'none';
+  }
+});
+
+function copyProfileApiKey() {
+  const key = document.getElementById('profileApiKey').textContent;
+  if(key.includes('•')) return;
+  navigator.clipboard.writeText(key).then(() => {
+    const btn = document.querySelector('.profile-api-copy');
+    btn.textContent = '✓ Copied'; setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+function doLogout() {
+  clearSession();
+  document.getElementById('guestButtons').style.display = 'flex';
+  document.getElementById('profileArea').style.display = 'none';
+  document.getElementById('profileDropdown').style.display = 'none';
+  document.getElementById('smSignupBtn').style.display = 'flex';
+  document.getElementById('smLoginBtn').style.display = 'flex';
+  document.getElementById('smProfileBtn').style.display = 'none';
+}
+
+// ── On Page Load: restore session or handle GitHub callback ──
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const ghData = params.get('gh_login');
+  const ghErr  = params.get('error');
+  if(ghData){
+    try{
+      const user = JSON.parse(decodeURIComponent(ghData));
+      saveSession(user);
+      renderProfile(user);
+      window.history.replaceState({}, '', window.location.pathname);
+    }catch(e){ console.warn('gh_login parse error', e); }
+  } else {
+    const user = getSession();
+    if(user) renderProfile(user);
+  }
+  if(ghErr){ console.warn('GitHub OAuth error:', ghErr); window.history.replaceState({},'',' '); }
+})();
+
+// ══════════════════════════════════════════════════════════════════════
+//  MENU
+// ══════════════════════════════════════════════════════════════════════
+let menuOpen=false;
+function openMenu(){
+  if(menuOpen)return;menuOpen=true;
+  document.getElementById('sideMenu').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMenu(){
+  if(!menuOpen)return;menuOpen=false;
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function navigate(page){
+  closeMenu();
+  setTimeout(()=>{
+    if(page.startsWith('#')){
+      const t=document.querySelector(page);
+      if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    } else {
+      window.location.href=page;
+    }
+  },200);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();closeAuthModal();}});
+
+// ── BUY POPUP ──
+function openBuyPopup(planName){
+  const msg=encodeURIComponent(`Hi Nimeshka! I want to buy the *${planName}* plan for Mezuka OPT Service. Please help me upgrade my account.`);
+  document.getElementById('popupPlanText').textContent=`You selected: ${planName}. Send a WhatsApp message to the owner to complete your purchase.`;
+  document.getElementById('popupWaLink').href=`https://wa.me/94721584279?text=${msg}`;
+  document.getElementById('buyPopup').classList.add('open');
+}
+function closeBuyPopup(){document.getElementById('buyPopup').classList.remove('open');}
+document.getElementById('buyPopup').addEventListener('click',function(e){if(e.target===this)closeBuyPopup();});
+
+// ── SCROLL REVEAL ──
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+
+// ── BANNER SLIDESHOW ──
+let _bIdx=0,_bAuto;
+const _bSlides=document.querySelectorAll('.banner-slide');
+const _bDots=document.querySelectorAll('.banner-dot');
+function bannerGo(n){
+  _bSlides[_bIdx].classList.remove('active');
+  _bDots[_bIdx].classList.remove('active');
+  _bIdx=(n+_bSlides.length)%_bSlides.length;
+  _bSlides[_bIdx].classList.add('active');
+  _bDots[_bIdx].classList.add('active');
+  resetBannerAuto();
+}
+function bannerMove(dir){bannerGo(_bIdx+dir);}
+function resetBannerAuto(){clearInterval(_bAuto);_bAuto=setInterval(()=>bannerMove(1),4000);}
+resetBannerAuto();
+(()=>{
+  const w=document.querySelector('.banner-wrap');
+  if(!w)return;
+  let sx=0;
+  w.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  w.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)bannerMove(dx<0?1:-1);},{passive:true});
+})();
+
+// ── MOBILE NAV CTA ──
+const mobileCta=document.getElementById('nav-cta-mobile');
+if(window.innerWidth<=768)mobileCta.style.display='inline-flex';
+window.addEventListener('resize',()=>{
+  mobileCta.style.display=window.innerWidth<=768?'inline-flex':'none';
+});
+</script>
+</body>
+</html>
