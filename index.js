@@ -32,6 +32,64 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  INTERNAL ROUTE GUARD
+//  /api/requestotp  /api/verifyotp  /api/refresh  /api/optstatus
+//  /api/optout  /api/register  →  same-server / connect.html only
+//  External users MUST use  /api/sendotp/:apiKey  &  /api/verifyopt/:apiKey
+// ══════════════════════════════════════════════════════════════════════════════
+const INTERNAL_ROUTES = [
+  '/api/requestotp',
+  '/api/verifyotp',
+  '/api/refresh',
+  '/api/optstatus',
+  '/api/optout',
+  '/api/register',
+];
+
+function isInternalRequest(req) {
+  const ip = (req.headers['x-forwarded-for']?.split(',')[0].trim()
+    || req.socket?.remoteAddress || '');
+
+  // localhost
+  if (['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(ip)) return true;
+
+  // Railway internal network (10.x.x.x)
+  if (/^10\./.test(ip)) return true;
+
+  // Same-origin: connect.html on the same Railway domain
+  const origin  = req.headers['origin']  || '';
+  const referer = req.headers['referer'] || '';
+  const selfUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+    : null;
+  if (selfUrl && (origin.startsWith(selfUrl) || referer.startsWith(selfUrl))) return true;
+
+  // No origin header = same-origin browser request
+  if (!origin) return true;
+
+  return false;
+}
+
+app.use((req, res, next) => {
+  const isBlocked = INTERNAL_ROUTES.some(r => req.path.startsWith(r));
+  if (!isBlocked) return next();
+
+  if (!isInternalRequest(req)) {
+    const from = req.headers['origin'] || req.socket?.remoteAddress || 'unknown';
+    console.warn(`[GUARD] Blocked ${req.path} from ${from}`);
+    return res.status(403).json({
+      success: false,
+      error:   'FORBIDDEN',
+      message: 'This endpoint is internal only. Use the API key routes instead.',
+      docs:    'GET /api/sendotp/:apiKey/:phone  |  GET /api/verifyopt/:apiKey/:phone/:otp',
+    });
+  }
+
+  next();
+});
+
+
 const pairingSockets = new Map();
 
 // ══════════════════════════════════════════════════════════════════════════════
