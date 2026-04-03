@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Connect Your Website – Mezuka OPT</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#4ecdc4;
+  --teal-d:#2bb5ab;
+  --teal-l:#7eddd7;
+  --teal-xl:#b2ebe8;
+  --teal-bg:#e8faf9;
+  --teal-bg2:#f0fdfc;
+  --dark:#1a2e2e;
+  --gray:#6b8080;
+  --gray-l:#a0b8b8;
+  --card-s:0 4px 24px rgba(78,205,196,0.13);
+  --card-sh:0 12px 40px rgba(78,205,196,0.25);
+  --wa-green:#25d366;
+  --wa-green-d:#128c7e;
+  --error:#e05555;
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--teal-bg2);
+  color:var(--dark);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(78,205,196,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 90% 100%, rgba(255,107,157,0.07) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%234ecdc4' fill-opacity='0.025'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* NAV */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(78,205,196,0.18);
+  padding:0 20px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  box-shadow:0 2px 16px rgba(78,205,196,0.08);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{width:28px;height:28px;border-radius:8px;overflow:hidden;border:1.5px solid rgba(78,205,196,0.3);box-shadow:0 4px 12px rgba(37,211,102,0.2);flex-shrink:0;}
+.nav-logo-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+.nav-brand{font-size:13px;font-weight:900;color:var(--dark);letter-spacing:-0.3px;}
+.nav-brand span{background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.nav-back{
+  display:flex;align-items:center;gap:6px;
+  color:var(--gray);font-size:13px;font-weight:700;text-decoration:none;
+  padding:6px 12px;border-radius:10px;
+  border:1px solid rgba(78,205,196,0.2);background:rgba(78,205,196,0.06);
+  transition:all .2s;
+}
+.nav-back:hover{color:var(--dark);background:rgba(78,205,196,0.12);border-color:rgba(78,205,196,0.35);}
+
+/* PAGE */
+.page{
+  position:relative;z-index:1;
+  min-height:100vh;padding:48px 20px 80px;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+/* PAGE HEADER */
+.page-header{text-align:center;margin-bottom:36px;animation:fadeUp .5s ease both;}
+.page-pill{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:5px 14px;margin-bottom:14px;
+  background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.25);border-radius:100px;
+  font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--wa-green-d);font-family:'JetBrains Mono',monospace;
+}
+.page-pill-dot{width:5px;height:5px;border-radius:50%;background:var(--wa-green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.page-title{font-size:clamp(24px,5vw,36px);font-weight:900;letter-spacing:-1px;color:var(--dark);margin-bottom:6px;line-height:1.1;}
+.page-sub{font-size:14px;color:var(--gray);max-width:420px;margin:0 auto;line-height:1.6;font-weight:500;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* STEP INDICATOR */
+.step-indicator{display:flex;align-items:center;margin-bottom:36px;animation:fadeUp .5s .1s ease both;}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:default;}
+.step-dot-circle{
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;
+  border:2px solid rgba(78,205,196,0.2);color:var(--gray-l);
+  background:white;box-shadow:var(--card-s);transition:all .3s;
+}
+.step-dot.active .step-dot-circle{border-color:var(--wa-green);color:var(--wa-green-d);background:rgba(37,211,102,0.08);box-shadow:0 0 0 4px rgba(37,211,102,0.12);}
+.step-dot.done .step-dot-circle{border-color:var(--wa-green);background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));color:white;box-shadow:0 4px 14px rgba(37,211,102,0.3);}
+.step-dot-label{font-size:10px;font-weight:700;color:var(--gray-l);white-space:nowrap;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.step-dot.active .step-dot-label{color:var(--wa-green-d);}
+.step-dot.done .step-dot-label{color:var(--teal-d);}
+.step-connector{width:72px;height:2px;background:rgba(78,205,196,0.15);margin:0 4px;margin-bottom:28px;transition:background .4s;border-radius:2px;}
+.step-connector.done{background:linear-gradient(90deg,var(--wa-green),var(--teal));}
+
+/* STEP PANELS */
+.step-panel{display:none;width:100%;max-width:560px;animation:fadeUp .4s ease;}
+.step-panel.active{display:block;}
+
+/* PANEL CARD */
+.panel-card{background:white;border:1px solid rgba(78,205,196,0.15);border-radius:24px;padding:36px 32px;box-shadow:var(--card-s);}
+.panel-title{font-size:22px;font-weight:900;color:var(--dark);margin-bottom:5px;letter-spacing:-0.5px;}
+.panel-sub{font-size:13.5px;color:var(--gray);margin-bottom:26px;line-height:1.55;font-weight:500;}
+
+/* FORM */
+.form-group{margin-bottom:15px;}
+label{display:block;font-size:11px;font-weight:800;color:var(--dark);margin-bottom:6px;letter-spacing:.8px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+label .lbl-note{color:var(--gray-l);font-weight:500;text-transform:none;letter-spacing:0;font-family:'Nunito',sans-serif;font-size:12px;}
+input[type=text],input[type=email],input[type=tel],input[type=password],input[type=url]{
+  width:100%;padding:12px 15px;
+  background:var(--teal-bg);border:1.5px solid rgba(78,205,196,0.2);border-radius:12px;
+  color:var(--dark);font-size:14px;font-family:'Nunito',sans-serif;font-weight:600;
+  outline:none;transition:border-color .2s,box-shadow .2s,background .2s;
+}
+input::placeholder{color:var(--gray-l);font-weight:400;}
+input:focus{border-color:rgba(78,205,196,0.5);background:white;box-shadow:0 0 0 3px rgba(78,205,196,0.12);}
+input.error-field{border-color:rgba(224,85,85,0.45);}
+
+.input-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;}
+.otp-send-btn{
+  padding:12px 16px;border-radius:12px;cursor:pointer;
+  background:rgba(37,211,102,0.1);border:1.5px solid rgba(37,211,102,0.3);
+  color:var(--wa-green-d);font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;
+  white-space:nowrap;transition:all .2s;
+}
+.otp-send-btn:hover{background:rgba(37,211,102,0.18);border-color:rgba(37,211,102,0.5);}
+.otp-send-btn:disabled{opacity:.4;cursor:not-allowed;}
+.otp-input-wrap input{letter-spacing:10px;font-size:20px;font-weight:900;text-align:center;font-family:'JetBrains Mono',monospace;}
+
+.submit-btn{
+  width:100%;padding:14px;border:none;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-size:15px;font-weight:900;font-family:'Nunito',sans-serif;
+  transition:all .22s cubic-bezier(0.34,1.4,0.64,1);margin-top:8px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  box-shadow:0 6px 24px rgba(37,211,102,0.3);
+}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(37,211,102,0.4);}
+.submit-btn:active{transform:scale(0.98);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+
+/* Messages */
+.msg{padding:11px 15px;border-radius:12px;font-size:13px;font-weight:600;margin-bottom:16px;display:none;align-items:center;gap:10px;}
+.msg.show{display:flex;}
+.msg.error{background:rgba(224,85,85,0.08);border:1px solid rgba(224,85,85,0.22);color:var(--error);}
+.msg.success{background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.25);color:var(--wa-green-d);}
+.msg.info{background:var(--teal-bg);border:1px solid rgba(78,205,196,0.2);color:var(--gray);}
+
+/* Spinner */
+.spinner{width:16px;height:16px;border:2.5px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* PLAN SELECTOR */
+.plan-select{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.plan-opt{
+  background:var(--teal-bg);border:1.5px solid rgba(78,205,196,0.15);
+  border-radius:16px;padding:16px 14px;cursor:pointer;transition:all .22s;
+  text-align:center;position:relative;
+}
+.plan-opt:hover{border-color:rgba(37,211,102,0.35);background:rgba(37,211,102,0.05);}
+.plan-opt.selected{border-color:var(--wa-green);background:rgba(37,211,102,0.07);box-shadow:0 0 0 3px rgba(37,211,102,0.1);}
+.plan-opt.selected::after{content:'✓';position:absolute;top:8px;right:10px;color:var(--wa-green);font-weight:900;font-size:13px;}
+.plan-opt-name{font-weight:900;font-size:14px;color:var(--dark);margin-bottom:5px;}
+.plan-opt-limit{font-size:10.5px;color:var(--wa-green-d);font-weight:700;font-family:'JetBrains Mono',monospace;}
+.plan-opt-price{font-size:12px;color:var(--gray);margin-top:4px;font-weight:600;}
+.plan-opt.pro-plan{border-color:rgba(37,211,102,0.25);}
+.plan-badge-sm{
+  position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-size:8px;font-weight:800;padding:2px 10px;border-radius:100px;
+  letter-spacing:.8px;font-family:'JetBrains Mono',monospace;
+  box-shadow:0 3px 10px rgba(37,211,102,0.3);
+}
+.paid-notice{
+  background:rgba(37,211,102,0.06);border:1px solid rgba(37,211,102,0.2);
+  border-radius:12px;padding:13px 15px;font-size:13px;color:var(--gray);
+  margin-bottom:16px;line-height:1.6;font-weight:500;display:none;
+}
+.paid-notice a{color:var(--wa-green-d);font-weight:700;}
+
+/* Privacy checkbox */
+.check-row{display:flex;align-items:flex-start;gap:10px;margin:14px 0;}
+.check-row input[type=checkbox]{width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:var(--wa-green);margin-top:2px;}
+.check-row label{font-size:13px;color:var(--gray);line-height:1.55;cursor:pointer;font-weight:500;text-transform:none;letter-spacing:0;font-family:'Nunito',sans-serif;}
+.check-row label a{color:var(--teal-d);font-weight:700;}
+
+/* SUCCESS BOX */
+.success-box{background:white;border:1px solid rgba(37,211,102,0.2);border-radius:24px;padding:40px 32px;text-align:center;animation:fadeUp .4s ease;box-shadow:var(--card-s);}
+.success-icon-wrap{width:80px;height:80px;border-radius:24px;margin:0 auto 18px;background:linear-gradient(135deg,rgba(37,211,102,0.12),rgba(78,205,196,0.1));border:2px solid rgba(37,211,102,0.2);display:flex;align-items:center;justify-content:center;font-size:38px;}
+.success-title{font-size:24px;font-weight:900;color:var(--dark);margin-bottom:8px;letter-spacing:-0.5px;}
+.success-sub{font-size:13.5px;color:var(--gray);line-height:1.65;margin-bottom:28px;font-weight:500;}
+
+/* API Key */
+.api-key-label{font-size:10px;font-weight:700;color:var(--gray-l);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;font-family:'JetBrains Mono',monospace;text-align:left;}
+.api-key-label span{color:var(--error);font-size:9px;}
+.api-key-box{background:var(--teal-bg);border:1px solid rgba(78,205,196,0.2);border-radius:12px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;}
+.api-key-val{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dark);word-break:break-all;font-weight:500;}
+.api-key-copy{flex-shrink:0;background:white;border:1px solid rgba(78,205,196,0.3);border-radius:8px;color:var(--teal-d);font-size:11px;font-weight:800;padding:5px 12px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;}
+.api-key-copy:hover{background:var(--teal-bg);border-color:var(--teal);}
+
+/* Snippet */
+.snippet-wrap{background:var(--dark);border:1px solid rgba(78,205,196,0.15);border-radius:14px;padding:18px;text-align:left;margin-bottom:14px;border-top:3px solid var(--teal-d);}
+.snippet-label{font-size:10px;color:var(--gray-l);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;font-family:'JetBrains Mono',monospace;}
+.snippet-code{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#a8ffd8;white-space:pre-wrap;word-break:break-all;line-height:1.7;}
+.copy-snippet-btn{width:100%;padding:11px;border:1.5px solid rgba(78,205,196,0.3);background:rgba(78,205,196,0.07);border-radius:11px;color:var(--teal-d);font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .2s;margin-bottom:14px;}
+.copy-snippet-btn:hover{background:rgba(78,205,196,0.15);border-color:var(--teal);}
+.back-link{display:block;text-align:center;font-size:13px;font-weight:700;color:var(--gray);text-decoration:none;margin-top:6px;transition:color .2s;}
+.back-link:hover{color:var(--teal-d);}
+
+/* PRIVACY POPUP */
+.privacy-popup{display:none;position:fixed;inset:0;z-index:300;background:rgba(26,46,46,0.55);backdrop-filter:blur(8px);align-items:center;justify-content:center;}
+.privacy-popup-box{background:white;border:1px solid rgba(78,205,196,0.2);border-radius:22px;padding:36px;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;animation:fadeUp .3s ease;box-shadow:0 24px 64px rgba(78,205,196,0.2);}
+.privacy-popup-title{font-size:20px;font-weight:900;color:var(--dark);margin-bottom:16px;letter-spacing:-0.3px;}
+.privacy-popup-body{font-size:13px;color:var(--gray);line-height:1.8;}
+.privacy-popup-body p{margin-bottom:12px;}
+.privacy-popup-body strong{color:var(--dark);font-weight:800;}
+.privacy-popup-body a{color:var(--wa-green-d);font-weight:700;}
+.privacy-accept-btn{margin-top:22px;width:100%;padding:13px;border:none;border-radius:13px;background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));color:white;font-weight:900;font-size:14px;cursor:pointer;font-family:'Nunito',sans-serif;box-shadow:0 4px 18px rgba(37,211,102,0.3);transition:all .22s;}
+.privacy-accept-btn:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(37,211,102,0.4);}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--teal-bg2);}
+::-webkit-scrollbar-thumb{background:var(--teal-xl);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--teal);}
+
+@media(max-width:600px){
+  .step-connector{width:40px;}
+  .panel-card,.success-box{padding:24px 18px;}
+  .page{padding:32px 16px 60px;}
+}
+
+/* ── USAGE GUIDE ── */
+.guide-section{margin-top:24px;text-align:left;}
+.guide-title{font-size:13px;font-weight:800;color:var(--dark);margin-bottom:12px;
+  letter-spacing:.5px;display:flex;align-items:center;gap:7px;}
+.guide-steps{display:flex;flex-direction:column;gap:10px;}
+.guide-step{display:flex;gap:12px;align-items:flex-start;
+  background:var(--teal-bg);border:1px solid rgba(78,205,196,0.15);
+  border-radius:14px;padding:14px 15px;}
+.guide-step-num{width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-size:12px;font-weight:900;display:flex;align-items:center;
+  justify-content:center;box-shadow:0 3px 10px rgba(37,211,102,0.3);}
+.guide-step-body{}
+.guide-step-label{font-size:12px;font-weight:800;color:var(--dark);margin-bottom:4px;}
+.guide-step-desc{font-size:12px;color:var(--gray);line-height:1.55;font-weight:500;}
+.guide-code{background:var(--dark);border-radius:8px;padding:9px 12px;margin-top:7px;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:#a8ffd8;
+  white-space:pre-wrap;word-break:break-all;line-height:1.6;}
+.guide-divider{height:1px;background:rgba(78,205,196,0.12);margin:20px 0;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="index.html">
+    <div class="nav-logo-icon"><img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT"></div>
+    <span class="nav-brand">Mezuka <span>OPT</span></span>
+  </a>
+  <a class="nav-back" href="index.html">← Back to Home</a>
+</nav>
+
+<div class="page">
+
+  <div class="page-header">
+    <div class="page-pill"><span class="page-pill-dot"></span>Website Registration</div>
+    <h1 class="page-title">Add Your Website</h1>
+    <p class="page-sub">Create your account and connect your website to Mezuka OPT Service in minutes.</p>
+  </div>
+
+  <div class="step-indicator">
+    <div class="step-dot active" id="dot1">
+      <div class="step-dot-circle">1</div>
+      <div class="step-dot-label">Your Details</div>
+    </div>
+    <div class="step-connector" id="conn1"></div>
+    <div class="step-dot" id="dot2">
+      <div class="step-dot-circle">2</div>
+      <div class="step-dot-label">Choose Plan</div>
+    </div>
+    <div class="step-connector" id="conn2"></div>
+    <div class="step-dot" id="dot3">
+      <div class="step-dot-circle">3</div>
+      <div class="step-dot-label">Get Code</div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step-panel active" id="step1">
+
+    <!-- Welcome card (shown when logged in from main.html) -->
+    <div id="welcomeCard" style="display:none;background:white;border:1px solid rgba(78,205,196,0.2);border-radius:24px;padding:24px 28px;margin-bottom:20px;box-shadow:var(--card-s);">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div id="welcomeAvatar" style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#25d366,#128c7e);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:white;flex-shrink:0;">N</div>
+        <div>
+          <div style="font-size:16px;font-weight:900;color:var(--dark);" id="welcomeName">Hey!</div>
+          <div style="font-size:11px;color:var(--gray);font-family:'JetBrains Mono',monospace;" id="welcomeEmail"></div>
+        </div>
+        <div style="margin-left:auto;">
+          <span id="welcomePlanBadge" style="background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.25);color:var(--wa-green-d);font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:100px;font-family:'JetBrains Mono',monospace;">FREE</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;">
+        <div style="background:var(--teal-bg);border:1px solid rgba(78,205,196,0.15);border-radius:11px;padding:10px;text-align:center;">
+          <div style="font-size:18px;font-weight:900;background:linear-gradient(135deg,#128c7e,#2bb5ab);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="welcomeUsed">0</div>
+          <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;font-family:'JetBrains Mono',monospace;margin-top:2px;">Used Today</div>
+        </div>
+        <div style="background:var(--teal-bg);border:1px solid rgba(78,205,196,0.15);border-radius:11px;padding:10px;text-align:center;">
+          <div style="font-size:18px;font-weight:900;background:linear-gradient(135deg,#128c7e,#2bb5ab);-webkit-background-clip:text;-webkit-text-fill-color:transparent;" id="welcomeLimit">50</div>
+          <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.8px;font-family:'JetBrains Mono',monospace;margin-top:2px;">Daily Limit</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Not logged in warning -->
+    <div id="notLoggedInWarning" style="display:none;background:rgba(255,107,157,0.07);border:1px solid rgba(255,107,157,0.2);border-radius:16px;padding:18px 20px;margin-bottom:20px;text-align:center;">
+      <div style="font-size:22px;margin-bottom:8px;">🔐</div>
+      <div style="font-size:14px;font-weight:800;color:var(--dark);margin-bottom:6px;">Sign in required</div>
+      <div style="font-size:13px;color:var(--gray);margin-bottom:14px;line-height:1.5;">Please sign up or log in from the home page first to connect your website.</div>
+      <a href="/" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:linear-gradient(135deg,#25d366,#128c7e);color:white;border-radius:12px;font-size:13px;font-weight:800;text-decoration:none;box-shadow:0 4px 14px rgba(37,211,102,0.3);">🏠 Go to Home Page</a>
+    </div>
+
+    <div class="panel-card" id="step1FormCard">
+      <div class="panel-title">Your Details</div>
+      <div class="panel-sub">Connect your website to Mezuka OPT Service.</div>
+      <div class="msg" id="msg1"></div>
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Your name"/>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="you@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Website Name</label>
+        <input type="text" id="siteName" placeholder="My Awesome Site"/>
+      </div>
+      <div class="form-group">
+        <label>Website URL</label>
+        <input type="url" id="siteUrl" placeholder="https://yourwebsite.com"/>
+      </div>
+      <div class="form-group">
+        <label>Password <span class="lbl-note">(for login)</span></label>
+        <input type="password" id="password" placeholder="Min 6 characters"/>
+      </div>
+
+      <button class="submit-btn" id="step1Btn" onclick="submitStep1()">Continue to Plan →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step-panel" id="step2">
+    <div class="panel-card">
+      <div class="panel-title">Choose Your Plan</div>
+      <div class="panel-sub">Select a plan that fits your needs. You can always upgrade later by contacting the owner.</div>
+      <div class="msg" id="msg2"></div>
+      <div class="plan-select">
+        <div class="plan-opt selected" id="plan_free" onclick="selectPlan('free')">
+          <div class="plan-opt-name">🆓 Free</div>
+          <div class="plan-opt-limit">50 OTPs / day</div>
+          <div class="plan-opt-price">$0 / month</div>
+        </div>
+        <div class="plan-opt" id="plan_starter" onclick="selectPlan('starter')">
+          <div class="plan-opt-name">⚡ Starter</div>
+          <div class="plan-opt-limit">80 OTPs / day</div>
+          <div class="plan-opt-price">$5 / month</div>
+        </div>
+        <div class="plan-opt pro-plan" id="plan_pro" onclick="selectPlan('pro')">
+          <div class="plan-badge-sm">POPULAR</div>
+          <div class="plan-opt-name">🚀 Pro</div>
+          <div class="plan-opt-limit">150 OTPs / day</div>
+          <div class="plan-opt-price">$12 / month</div>
+        </div>
+        <div class="plan-opt" id="plan_unlimited" onclick="selectPlan('unlimited')">
+          <div class="plan-opt-name">♾️ Unlimited</div>
+          <div class="plan-opt-limit">Unlimited OTPs</div>
+          <div class="plan-opt-price">$25 / month</div>
+        </div>
+      </div>
+      <div class="paid-notice" id="paidPlanNotice">
+        💬 After completing registration, WhatsApp the owner at
+        <a href="https://wa.me/94721584279" target="_blank">+94 721 584 279</a>
+        with your registered name to activate the paid plan.
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="privacyCheck"/>
+        <label for="privacyCheck">I agree to the <a href="#" onclick="showPrivacyPolicy(event)">Privacy Policy</a> and understand how my data is used by Mezuka OPT Service.</label>
+      </div>
+      <button class="submit-btn" id="step2Btn" onclick="submitStep2()">Complete Registration →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step-panel" id="step3">
+    <div class="success-box">
+      <div class="success-icon-wrap">🎉</div>
+      <div class="success-title">You're Connected!</div>
+      <div class="success-sub">Your account is ready. Copy the snippet below and add it to your website to start sending WhatsApp OTPs.</div>
+      <div style="text-align:left;">
+
+        <!-- API Key -->
+        <div class="api-key-label">Your API Key <span>(Keep this secret!)</span></div>
+        <div class="api-key-box">
+          <span class="api-key-val" id="apiKeyDisplay">••••••••••••••••••••••••••••••••</span>
+          <button class="api-key-copy" onclick="copyApiKey()">Copy</button>
+        </div>
+
+        <!-- Script Snippet -->
+        <div class="snippet-wrap">
+          <div class="snippet-label">① Add to your website &lt;body&gt;</div>
+          <div class="snippet-code" id="snippetCode">Loading snippet…</div>
+        </div>
+        <button class="copy-snippet-btn" onclick="copySnippet()">📋 Copy HTML Snippet</button>
+
+        <div class="guide-divider"></div>
+
+        <!-- Usage Guide -->
+        <div class="guide-section">
+          <div class="guide-title">🛠️ How to use on your website</div>
+          <div class="guide-steps">
+
+            <div class="guide-step">
+              <div class="guide-step-num">1</div>
+              <div class="guide-step-body">
+                <div class="guide-step-label">Add the script tag</div>
+                <div class="guide-step-desc">Paste the snippet above inside your website's <code>&lt;body&gt;</code> tag. This loads the Mezuka OPT widget.</div>
+              </div>
+            </div>
+
+            <div class="guide-step">
+              <div class="guide-step-num">2</div>
+              <div class="guide-step-body">
+                <div class="guide-step-label">Add a Verify button</div>
+                <div class="guide-step-desc">Add this button anywhere on your page to open the OTP modal:</div>
+                <div class="guide-code">&lt;button onclick="MezukaOpt.showModal()"&gt;
+  Verify via WhatsApp
+&lt;/button&gt;</div>
+              </div>
+            </div>
+
+            <div class="guide-step">
+              <div class="guide-step-num">3</div>
+              <div class="guide-step-body">
+                <div class="guide-step-label">Handle verified users (optional)</div>
+                <div class="guide-step-desc">Get notified when a user successfully verifies. Add this script after the snippet:</div>
+                <div class="guide-code">&lt;script&gt;
+MezukaOpt.onVerified(function(data) {
+  console.log("Verified:", data.phone);
+  console.log("Token:", data.accessToken);
+  // your logic here (redirect, unlock, etc.)
+});
+&lt;/script&gt;</div>
+              </div>
+            </div>
+
+            <div class="guide-step">
+              <div class="guide-step-num">4</div>
+              <div class="guide-step-body">
+                <div class="guide-step-label">Or use the API directly</div>
+                <div class="guide-step-desc">You can also call the API manually using your API key:</div>
+                <div class="guide-code" id="apiGuideCode">GET /api/sendotp/YOUR_API_KEY/94712345678
+GET /api/verifyopt/YOUR_API_KEY/94712345678/123456</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="guide-divider"></div>
+
+        <div class="paid-notice" id="paidPlanReminder" style="margin-bottom:14px;">
+          📱 To activate your paid plan, WhatsApp <a href="https://wa.me/94721584279" target="_blank">Nimeshka (+94 721 584 279)</a> with your registered name.
+        </div>
+        <a href="index.html" class="back-link">← Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PRIVACY POPUP -->
+<div class="privacy-popup" id="privacyPopup">
+  <div class="privacy-popup-box">
+    <div class="privacy-popup-title">🔐 Privacy Policy</div>
+    <div class="privacy-popup-body">
+      <p><strong>Data We Collect:</strong> We collect your name, email address, WhatsApp number, website name and URL, and your chosen plan.</p>
+      <p><strong>How We Use It:</strong> Your data is used solely to provide OTP verification services through your connected website. We do not sell or share your personal data with third parties.</p>
+      <p><strong>WhatsApp Usage:</strong> Your WhatsApp number is used only to send OTP verification codes and service notifications related to Mezuka OPT Service.</p>
+      <p><strong>Data Storage:</strong> All data is stored securely in encrypted databases. OTP records are automatically deleted after 5 minutes.</p>
+      <p><strong>Your Rights:</strong> You may request deletion of your account and data at any time by contacting the owner at +94 721 584 279.</p>
+      <p><strong>Contact:</strong> Nimeshka Mihiran, Black Cat Ofc – <a href="https://wa.me/94721584279">+94 721 584 279</a></p>
+    </div>
+    <button class="privacy-accept-btn" onclick="acceptPrivacy()">✅ I Understand & Accept</button>
+  </div>
+</div>
+
+<script>
+const API_BASE = '';
+let currentStep=1, selectedPlan='free', generatedApiKey=null, userData={};
+let sessionUser = null; // loaded from localStorage (set by main.html login/signup)
+
+// ── Session helpers ──
+function getSession(){ try{ return JSON.parse(localStorage.getItem('mezuka_user')); }catch{ return null; } }
+
+// ── On page load: check session ──
+(function init(){
+  const user = getSession();
+  if(user && user.email){
+    sessionUser = user;
+    applySession(user);
+  } else {
+    // Not logged in — show warning, hide form
+    document.getElementById('notLoggedInWarning').style.display = 'block';
+    document.getElementById('step1FormCard').style.display = 'none';
+  }
+})();
+
+function applySession(user){
+  // Show welcome card
+  const card = document.getElementById('welcomeCard');
+  card.style.display = 'block';
+  document.getElementById('welcomeAvatar').textContent = (user.name||'U').charAt(0).toUpperCase();
+  document.getElementById('welcomeName').textContent = 'Hey, ' + (user.name||'there') + '!';
+  document.getElementById('welcomeEmail').textContent = user.email || '';
+  document.getElementById('welcomePlanBadge').textContent = (user.plan||'free').toUpperCase();
+  document.getElementById('welcomeUsed').textContent = user.todayUsed ?? 0;
+  document.getElementById('welcomeLimit').textContent = user.dailyLimit === -1 ? '∞' : (user.dailyLimit ?? 50);
+
+  // Pre-fill fields
+  if(user.name)     { const f=document.getElementById('name');     if(f) f.value=user.name; }
+  if(user.email)    { const f=document.getElementById('email');    if(f) f.value=user.email; }
+  if(user.siteName) { const f=document.getElementById('siteName'); if(f) f.value=user.siteName; }
+  if(user.siteUrl)  { const f=document.getElementById('siteUrl');  if(f) f.value=user.siteUrl; }
+
+  // If already fully registered (has apiKey + siteName), show their info
+  if(user.apiKey && user.siteName){
+    buildSnippet(user.apiKey, API_BASE || window.location.origin);
+    document.getElementById('apiKeyDisplay').textContent = user.apiKey;
+    goToStep(3);
+  }
+}
+
+function goToStep(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('step'+i).classList.toggle('active',i===n);
+    const dot=document.getElementById('dot'+i);
+    dot.classList.remove('active','done');
+    if(i<n)dot.classList.add('done');
+    else if(i===n)dot.classList.add('active');
+  });
+  [1,2].forEach(i=>document.getElementById('conn'+i).classList.toggle('done',i<n));
+  currentStep=n; window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showMsg(id,type,text){const el=document.getElementById(id);el.className='msg '+type+' show';el.innerHTML=(type==='error'?'⚠️ ':'✅ ')+text;}
+function hideMsg(id){document.getElementById(id).classList.remove('show');}
+
+async function submitStep1(){
+  if(!sessionUser){showMsg('msg1','error','Please sign in from the home page first.');return;}
+  const name=document.getElementById('name').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const siteName=document.getElementById('siteName').value.trim();
+  const siteUrl=document.getElementById('siteUrl').value.trim();
+  const password=document.getElementById('password').value;
+
+  if(!name||!email||!siteName||!siteUrl||!password){showMsg('msg1','error','Please fill in all fields.');return;}
+  if(password.length<6){showMsg('msg1','error','Password must be at least 6 characters.');return;}
+
+  userData={name,email,siteName,siteUrl,password,phone:sessionUser.phone||''};
+  hideMsg('msg1');
+  goToStep(2);
+}
+
+function selectPlan(plan){
+  selectedPlan=plan;
+  ['free','starter','pro','unlimited'].forEach(p=>document.getElementById('plan_'+p).classList.toggle('selected',p===plan));
+  document.getElementById('paidPlanNotice').style.display=plan==='free'?'none':'block';
+}
+
+async function submitStep2(){
+  if(!document.getElementById('privacyCheck').checked){showMsg('msg2','error','Please accept the Privacy Policy to continue.');return;}
+  const btn=document.getElementById('step2Btn');
+  btn.disabled=true;btn.innerHTML='<div class="spinner"></div> Creating account…';hideMsg('msg2');
+  try{
+    // Use the session's accessToken if available, else try login to get one
+    let token = sessionUser.accessToken;
+
+    // If no token cached, we need a fresh one via OTP — but since user already verified
+    // during signup on main.html, we re-login to get a token
+    if(!token){
+      // Try to fetch via login endpoint (password was set during main.html signup)
+      const loginRes = await fetch(`${API_BASE}/api/login`,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:userData.email, password:userData.password})
+      });
+      const loginData = await loginRes.json();
+      if(loginData.success && loginData.user){
+        // User already fully registered — go straight to step 3
+        const u = loginData.user;
+        localStorage.setItem('mezuka_user', JSON.stringify({...sessionUser,...u}));
+        buildSnippet(u.apiKey, API_BASE||window.location.origin);
+        document.getElementById('apiKeyDisplay').textContent = u.apiKey;
+        if(selectedPlan!=='free') document.getElementById('paidPlanReminder').style.display='block';
+        btn.disabled=false; btn.innerHTML='Complete Registration →';
+        goToStep(3); return;
+      }
+    }
+
+    // Register via WhatsApp-verified token (from main.html signup flow)
+    if(!token){
+      showMsg('msg2','error','Session expired. Please sign in again from the home page.');
+      btn.disabled=false; btn.innerHTML='Complete Registration →'; return;
+    }
+
+    const res=await fetch(`${API_BASE}/api/register`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
+      body:JSON.stringify({...userData,plan:selectedPlan})
+    });
+    const data=await res.json();
+    if(!data.success){showMsg('msg2','error',data.message||'Registration failed. Please try again.');btn.disabled=false;btn.innerHTML='Complete Registration →';return;}
+    generatedApiKey=data.apiKey;
+
+    // Update session
+    const updated = {...sessionUser, apiKey:data.apiKey, plan:data.plan||selectedPlan, dailyLimit:data.dailyLimit, siteName:userData.siteName, siteUrl:userData.siteUrl};
+    localStorage.setItem('mezuka_user', JSON.stringify(updated));
+
+    buildSnippet(data.apiKey, API_BASE||window.location.origin);
+    document.getElementById('apiKeyDisplay').textContent=data.apiKey;
+    if(selectedPlan!=='free') document.getElementById('paidPlanReminder').style.display='block';
+    btn.disabled=false; btn.innerHTML='Complete Registration →';
+    goToStep(3);
+  }catch(e){showMsg('msg2','error','Network error. Please try again.');btn.disabled=false;btn.innerHTML='Complete Registration →';}
+}
+
+function buildSnippet(apiKey,serverUrl){
+  const snippet=`<!-- Mezuka OPT Service – WhatsApp OTP -->\n<script src="${serverUrl}/mezuka-opt.js" \n  data-api-key="${apiKey}"\n  data-server="${serverUrl}">\n<\/script>`;
+  document.getElementById('snippetCode').textContent=snippet;
+  const guide=document.getElementById('apiGuideCode');
+  if(guide) guide.textContent=`GET /api/sendotp/${apiKey}/94712345678\nGET /api/verifyopt/${apiKey}/94712345678/123456`;
+}
+
+function copySnippet(){
+  navigator.clipboard.writeText(document.getElementById('snippetCode').textContent).then(()=>{
+    const btn=document.querySelector('.copy-snippet-btn');btn.textContent='✅ Copied!';
+    setTimeout(()=>btn.textContent='📋 Copy HTML Snippet',2000);
+  });
+}
+
+function copyApiKey(){
+  navigator.clipboard.writeText(document.getElementById('apiKeyDisplay').textContent).then(()=>{
+    const btn=document.querySelector('.api-key-copy');btn.textContent='✓ Copied';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+function showPrivacyPolicy(e){if(e)e.preventDefault();document.getElementById('privacyPopup').style.display='flex';}
+function acceptPrivacy(){document.getElementById('privacyCheck').checked=true;document.getElementById('privacyPopup').style.display='none';}
+document.getElementById('privacyPopup').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+</script>
+</body>
+</html>
