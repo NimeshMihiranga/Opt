@@ -111,16 +111,13 @@ async function initWaSender() {
       browser: ['Ubuntu', 'Chrome', '20.0.04'],
       syncFullHistory: false,
       generateHighQualityLinkPreview: false,
+      connectTimeoutMs: 60000,
+      defaultQueryTimeoutMs: 60000,
     });
 
     conn.ev.on('creds.update', saveCreds);
 
-    conn.ev.on('connection.update', ({ connection, lastDisconnect, qr }) => {
-      if (qr) {
-        console.log('\n⚠️  [OTP-SENDER] Scan QR to link the OTP sender number:');
-        try { require('qrcode-terminal').generate(qr, { small: true }); }
-        catch { console.log('[OTP-SENDER] QR (raw):', qr); }
-      }
+    conn.ev.on('connection.update', async ({ connection, lastDisconnect }) => {
       if (connection === 'open') {
         waConn  = conn;
         waReady = true;
@@ -128,15 +125,46 @@ async function initWaSender() {
       }
       if (connection === 'close') {
         waReady = false;
-        const code = new Boom(lastDisconnect?.error)?.output?.statusCode;
-        if (code !== DisconnectReason.loggedOut) {
+        const statusCode = new Boom(lastDisconnect?.error)?.output?.statusCode;
+        if (statusCode !== DisconnectReason.loggedOut) {
           console.log('🔄 [OTP-SENDER] Reconnecting in 5s…');
           setTimeout(initWaSender, 5000);
         } else {
-          console.warn('🚪 [OTP-SENDER] Logged out. Re-scan QR to reconnect.');
+          console.warn('🚪 [OTP-SENDER] Logged out. Restart server to re-pair.');
+          await fs.remove(WA_SESSION_DIR).catch(() => {});
         }
       }
     });
+
+    // If not yet registered → request pairing code (no QR)
+    if (!conn.authState.creds.registered) {
+      const senderNumber = process.env.OTP_SENDER_NUMBER;
+      if (!senderNumber) {
+        console.error('❌ [OTP-SENDER] OTP_SENDER_NUMBER not set in .env (e.g. 94712345678)');
+        return;
+      }
+      const cleanNumber = senderNumber.replace(/\D/g, '');
+      console.log('\n⏳ [OTP-SENDER] Waiting 5s before requesting pairing code…');
+      await new Promise(r => setTimeout(r, 5000));
+      try {
+        const pairCode = await conn.requestPairingCode(cleanNumber);
+        const formatted = pairCode?.match(/.{1,4}/g)?.join('-') || pairCode;
+        console.log('\n╔══════════════════════════════════════╗');
+        console.log('║  🔑 OTP SENDER PAIRING CODE           ║');
+        console.log('║                                       ║');
+        console.log(`║  Code : ${formatted.padEnd(29)}║`);
+        console.log('║                                       ║');
+        console.log('║  Steps:                               ║');
+        console.log('║  1. WhatsApp → Settings               ║');
+        console.log('║  2. Linked Devices → Link a device    ║');
+        console.log('║  3. Tap "Link with phone number"      ║');
+        console.log('║  4. Enter the code above              ║');
+        console.log('╚══════════════════════════════════════╝\n');
+      } catch (pairErr) {
+        console.error('❌ [OTP-SENDER] Pairing code request failed:', pairErr.message);
+        setTimeout(initWaSender, 10000);
+      }
+    }
 
   } catch (err) {
     console.error('❌ [OTP-SENDER] Init error:', err.message);
