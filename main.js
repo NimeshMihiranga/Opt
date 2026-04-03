@@ -989,8 +989,8 @@ function registerGithubRoutes(app) {
 // ══════════════════════════════════════════════════════════════════════════════
 function registerGoogleRoutes(app) {
 
-  const GOOGLE_CLIENT_ID     = process.env.GOOGLE_CLIENT_ID     || '';
-  const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+  const GOOGLE_CLIENT_ID     = process.env.GOOGLE_CLIENT_ID     || '204028180433-84f3dpfshdql5e424mqetubr8m7j55ib.apps.googleusercontent.com';
+  const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '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';
 
   function getBaseUrl(req) {
     if (process.env.RAILWAY_PUBLIC_DOMAIN) return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
