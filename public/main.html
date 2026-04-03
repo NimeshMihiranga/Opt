@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mezuka OPT Service – by Black Cat Ofc</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900;1000&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --teal:#4ecdc4;
+  --teal-d:#2bb5ab;
+  --teal-dd:#1a8f87;
+  --teal-l:#7eddd7;
+  --teal-xl:#b2ebe8;
+  --teal-bg:#e8faf9;
+  --teal-bg2:#f0fdfc;
+  --pink:#ff6b9d;
+  --pink-l:#ffb3cc;
+  --pink-bg:rgba(255,107,157,0.08);
+  --white:#fff;
+  --dark:#1a2e2e;
+  --dark2:#2a3d3d;
+  --gray:#6b8080;
+  --gray-l:#a0b8b8;
+  --gray-bg:#f5fafa;
+  --card-s:0 4px 24px rgba(78,205,196,0.13);
+  --card-sh:0 12px 40px rgba(78,205,196,0.25);
+  --green:#2ecc71;
+  --wa-green:#25d366;
+  --wa-green-d:#128c7e;
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--teal-bg2);
+  color:var(--dark);
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* BG TEXTURE */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 50% at 10% 0%, rgba(78,205,196,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 90% 100%, rgba(255,107,157,0.07) 0%, transparent 55%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%234ecdc4' fill-opacity='0.025'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── NAV ── */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,0.88);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(78,205,196,0.18);
+  padding:0 20px;height:56px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  box-shadow:0 2px 16px rgba(78,205,196,0.08);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-icon{
+  width:28px;height:28px;border-radius:8px;overflow:hidden;
+  border:1.5px solid rgba(78,205,196,0.3);
+  box-shadow:0 4px 12px rgba(37,211,102,0.2);flex-shrink:0;
+}
+.nav-logo-icon img{width:100%;height:100%;object-fit:cover;display:block;}
+.nav-brand{font-size:13px;font-weight:900;color:var(--dark);letter-spacing:-0.3px;}
+.nav-brand span{
+  background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.nav-links{display:flex;align-items:center;gap:4px;}
+.nav-links a{
+  color:var(--gray);font-size:13px;text-decoration:none;font-weight:600;
+  padding:6px 12px;border-radius:10px;
+  transition:color .2s,background .2s;
+}
+.nav-links a:hover{color:var(--dark);background:var(--teal-bg);}
+.nav-cta{
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:#fff!important;font-weight:800!important;
+  border-radius:12px!important;
+  box-shadow:0 4px 16px rgba(37,211,102,0.3);
+}
+.nav-cta:hover{opacity:.9;transform:translateY(-1px);}
+.nav-menu-btn{
+  width:32px;height:32px;border-radius:9px;
+  background:rgba(78,205,196,0.08);border:1px solid rgba(78,205,196,0.2);
+  display:none;flex-direction:column;justify-content:center;align-items:center;gap:4px;
+  cursor:pointer;transition:background 0.18s;flex-shrink:0;
+}
+.nav-menu-btn span{display:block;width:14px;height:1.6px;background:var(--teal-d);border-radius:2px;}
+
+/* ── HERO ── */
+.hero{
+  position:relative;z-index:1;
+  padding:72px 5% 56px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  animation:fadeUp 0.6s ease both;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes logoPop{from{opacity:0;transform:scale(0.6) rotate(-8deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+
+.hero-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;margin-bottom:28px;
+  background:rgba(37,211,102,0.1);
+  border:1px solid rgba(37,211,102,0.28);border-radius:100px;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--wa-green-d);font-family:'JetBrains Mono',monospace;
+}
+.hero-pill-dot{width:6px;height:6px;border-radius:50%;background:var(--wa-green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(0.75)}}
+
+.hero-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+  background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;
+  animation:fadeUp 0.6s ease 0.15s both;
+}
+.hero-title{
+  font-size:clamp(40px,7.5vw,80px);
+  font-weight:1000;letter-spacing:-3px;line-height:1.0;
+  color:var(--dark);margin-bottom:8px;
+  animation:fadeUp 0.6s ease 0.2s both;
+}
+.hero-title span{
+  background:linear-gradient(135deg,var(--wa-green) 0%,var(--wa-green-d) 50%,var(--teal) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero-sub{
+  font-size:16px;color:var(--gray);max-width:480px;line-height:1.7;
+  margin:0 auto 36px;font-weight:500;
+  animation:fadeUp 0.6s ease 0.25s both;
+}
+.hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.6s ease 0.3s both;}
+.btn-primary{
+  padding:14px 32px;border-radius:16px;border:none;
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1);
+  box-shadow:0 6px 28px rgba(37,211,102,0.35);
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+}
+.btn-primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 40px rgba(37,211,102,0.45);}
+.btn-primary:active{transform:scale(0.97);}
+.btn-ghost{
+  padding:14px 24px;border-radius:16px;
+  border:2px solid rgba(78,205,196,0.3);
+  background:rgba(78,205,196,0.06);
+  color:var(--teal-d);font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;
+  cursor:pointer;transition:all 0.22s;
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+}
+.btn-ghost:hover{background:rgba(78,205,196,0.12);border-color:var(--teal);transform:translateY(-2px);}
+
+.hero-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  margin-top:52px;width:100%;max-width:680px;
+  animation:fadeUp 0.6s ease 0.4s both;
+}
+.stat-card{
+  background:white;border:1px solid rgba(78,205,196,0.15);
+  border-radius:20px;padding:20px 16px;text-align:center;
+  box-shadow:var(--card-s);transition:all 0.22s;
+  position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--wa-green),var(--teal));
+}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--card-sh);}
+.stat-num{
+  font-size:28px;font-weight:900;letter-spacing:-1.5px;line-height:1;
+  background:linear-gradient(135deg,var(--wa-green-d),var(--teal-d));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:5px;
+}
+.stat-label{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px;font-family:'JetBrains Mono',monospace;}
+
+/* ── PAGE WRAPPER ── */
+.page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:0 22px 80px;}
+
+/* ── SECTION HEADER ── */
+.sec-hd{text-align:center;margin-bottom:32px;}
+.sec-pill{
+  display:inline-block;font-size:10px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--teal-d);
+  font-family:'JetBrains Mono',monospace;margin-bottom:10px;
+}
+.sec-title{font-size:28px;font-weight:900;letter-spacing:-0.8px;color:var(--dark);margin-bottom:8px;}
+.sec-sub{font-size:13.5px;color:var(--gray);max-width:440px;margin:0 auto;line-height:1.6;}
+
+/* ── HOW IT WORKS ── */
+.how-section{margin-bottom:60px;}
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.how-card{
+  background:white;border:1px solid rgba(78,205,196,0.14);
+  border-radius:20px;padding:26px 22px;
+  box-shadow:var(--card-s);transition:all 0.25s cubic-bezier(0.34,1.2,0.64,1);
+  position:relative;overflow:hidden;
+}
+.how-card:hover{transform:translateY(-4px);box-shadow:var(--card-sh);border-color:rgba(78,205,196,0.28);}
+.how-num{
+  font-size:52px;font-weight:900;letter-spacing:-2px;line-height:1;
+  background:linear-gradient(135deg,rgba(78,205,196,0.15),rgba(37,211,102,0.1));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:12px;
+}
+.how-ico{
+  width:48px;height:48px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:14px;
+  background:var(--teal-bg);
+  border:1px solid rgba(78,205,196,0.2);
+  transition:transform 0.22s;
+}
+.how-card:hover .how-ico{transform:scale(1.08) rotate(4deg);}
+.how-name{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:6px;letter-spacing:-0.2px;}
+.how-desc{font-size:12.5px;color:var(--gray);line-height:1.6;}
+
+/* ── PLANS ── */
+.plans-section{margin-bottom:60px;}
+.plans-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;
+  max-width:920px;margin:0 auto;
+}
+.plan-card{
+  background:white;border:1px solid rgba(78,205,196,0.15);
+  border-radius:20px;padding:28px 22px;
+  box-shadow:var(--card-s);transition:all 0.25s cubic-bezier(0.34,1.2,0.64,1);
+  position:relative;
+}
+.plan-card:hover{transform:translateY(-4px);box-shadow:var(--card-sh);border-color:rgba(37,211,102,0.3);}
+.plan-card.popular{
+  border-color:rgba(37,211,102,0.35);
+  background:linear-gradient(135deg,rgba(37,211,102,0.04),rgba(78,205,196,0.03));
+}
+.plan-badge{
+  position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-size:9px;font-weight:800;letter-spacing:1px;
+  padding:4px 14px;border-radius:100px;white-space:nowrap;
+  font-family:'JetBrains Mono',monospace;
+  box-shadow:0 4px 14px rgba(37,211,102,0.35);
+}
+.plan-name{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
+.plan-price{
+  font-size:36px;font-weight:900;color:var(--dark);letter-spacing:-1.5px;margin:10px 0 4px;
+}
+.plan-price sub{font-size:14px;font-weight:500;color:var(--gray);letter-spacing:0;}
+.plan-limit{
+  font-size:11.5px;color:var(--wa-green-d);font-weight:700;margin-bottom:18px;
+  padding:5px 10px;background:rgba(37,211,102,0.1);border-radius:8px;
+  display:inline-block;font-family:'JetBrains Mono',monospace;
+  border:1px solid rgba(37,211,102,0.2);
+}
+.plan-features{list-style:none;margin-bottom:22px;}
+.plan-features li{
+  font-size:12.5px;color:var(--gray);padding:6px 0;
+  border-bottom:1px solid rgba(78,205,196,0.12);display:flex;gap:8px;align-items:center;
+}
+.plan-features li:last-child{border:none;}
+.plan-features li::before{content:'✓';color:var(--wa-green);font-weight:700;flex-shrink:0;}
+.plan-btn{
+  width:100%;padding:11px;border-radius:12px;border:none;cursor:pointer;
+  font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;
+  transition:all 0.22s;
+}
+.plan-btn-free{
+  background:rgba(78,205,196,0.1);color:var(--teal-d);
+  border:1px solid rgba(78,205,196,0.2);
+}
+.plan-btn-free:hover{background:rgba(78,205,196,0.18);}
+.plan-btn-paid{
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;box-shadow:0 4px 16px rgba(37,211,102,0.3);
+}
+.plan-btn-paid:hover{opacity:.9;transform:translateY(-1px);}
+
+/* ── GUIDE ── */
+.guide-section{margin-bottom:60px;}
+.guide-wrap{
+  max-width:820px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;
+}
+.guide-block{
+  background:white;border:1px solid rgba(78,205,196,0.15);
+  border-radius:20px;padding:28px;
+  box-shadow:var(--card-s);
+}
+.guide-block h3{
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
+  color:var(--dark);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+.guide-block ol,.guide-block ul{padding-left:18px;}
+.guide-block li{
+  font-size:13px;color:var(--gray);line-height:1.7;margin-bottom:5px;
+}
+.guide-block li strong{color:var(--dark);}
+.code-pill{
+  display:inline-block;
+  background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.25);
+  border-radius:6px;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:var(--teal-d);margin-top:10px;
+}
+
+/* ── CONNECT CTA ── */
+.cta-section{margin-bottom:60px;}
+.cta-card{
+  background:linear-gradient(135deg,var(--wa-green) 0%,var(--wa-green-d) 55%,var(--teal-d) 100%);
+  border-radius:28px;padding:52px 40px;text-align:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 16px 48px rgba(37,211,102,0.3);
+}
+.cta-card::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(255,255,255,0.12) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 20%,rgba(78,205,196,0.2) 0%,transparent 40%);
+  pointer-events:none;
+}
+.cta-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,0.8);font-family:'JetBrains Mono',monospace;
+  margin-bottom:14px;
+  padding:4px 12px;background:rgba(255,255,255,0.15);border-radius:100px;
+  border:1px solid rgba(255,255,255,0.25);
+}
+.cta-title{
+  font-size:clamp(26px,5vw,42px);font-weight:900;
+  color:white;letter-spacing:-1.5px;margin-bottom:10px;line-height:1.1;
+}
+.cta-sub{font-size:15px;color:rgba(255,255,255,0.82);margin-bottom:28px;line-height:1.6;max-width:380px;margin-left:auto;margin-right:auto;}
+.btn-white{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 34px;border-radius:16px;border:none;
+  background:white;color:var(--wa-green-d);
+  font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;
+  cursor:pointer;transition:all 0.25s cubic-bezier(0.34,1.4,0.64,1);
+  box-shadow:0 6px 24px rgba(0,0,0,0.15);
+  text-decoration:none;letter-spacing:-0.2px;
+}
+.btn-white:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 36px rgba(0,0,0,0.2);}
+.btn-white:active{transform:scale(0.97);}
+
+/* ── OWNER ── */
+.owner-section{margin-bottom:60px;}
+.owner-card{
+  background:white;border:1px solid rgba(78,205,196,0.15);
+  border-radius:24px;padding:36px 32px;
+  box-shadow:var(--card-s);
+  display:flex;align-items:flex-start;gap:28px;
+  flex-wrap:wrap;
+  position:relative;overflow:hidden;
+  max-width:720px;margin:0 auto;
+}
+.owner-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:linear-gradient(180deg,var(--wa-green),var(--teal));
+  border-radius:4px 0 0 4px;
+}
+.owner-avatar{
+  width:80px;height:80px;border-radius:20px;overflow:hidden;
+  background:linear-gradient(135deg,var(--wa-green),var(--teal-d));
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;flex-shrink:0;
+  border:2px solid rgba(78,205,196,0.2);
+  box-shadow:0 8px 28px rgba(78,205,196,0.18);
+}
+.owner-info{flex:1;min-width:200px;}
+.owner-role{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--teal-d);font-family:'JetBrains Mono',monospace;margin-bottom:6px;
+}
+.owner-name{font-size:24px;font-weight:900;color:var(--dark);letter-spacing:-0.5px;margin-bottom:6px;}
+.owner-desc{font-size:13px;color:var(--gray);line-height:1.65;margin-bottom:14px;}
+.owner-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.owner-tag{
+  font-size:10.5px;font-weight:700;padding:4px 12px;border-radius:100px;
+  font-family:'JetBrains Mono',monospace;
+  background:var(--teal-bg);color:var(--teal-d);
+  border:1px solid rgba(78,205,196,0.2);
+}
+.owner-links{display:flex;flex-direction:column;gap:8px;}
+.owner-link-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gray);}
+.owner-link-row a{color:var(--dark);text-decoration:none;font-weight:600;}
+.owner-link-row a:hover{color:var(--wa-green-d);}
+
+/* ── BUY POPUP ── */
+.wa-popup{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(26,46,46,0.55);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;
+}
+.wa-popup.open{display:flex;}
+.wa-popup-box{
+  background:white;border:1px solid rgba(78,205,196,0.2);
+  border-radius:24px;padding:40px;max-width:400px;width:90%;text-align:center;
+  animation:fadeUp .3s ease;
+  box-shadow:0 24px 64px rgba(78,205,196,0.2);
+}
+.wa-popup-box h3{font-size:22px;font-weight:900;color:var(--dark);margin-bottom:8px;letter-spacing:-0.5px;}
+.wa-popup-box p{font-size:13.5px;color:var(--gray);margin-bottom:24px;line-height:1.65;}
+.wa-popup-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  color:white;font-weight:800;font-size:14px;
+  padding:13px 28px;border-radius:14px;text-decoration:none;
+  transition:all 0.22s;font-family:'Nunito',sans-serif;
+  box-shadow:0 4px 18px rgba(37,211,102,0.32);
+}
+.wa-popup-btn:hover{opacity:.9;transform:translateY(-2px);}
+.wa-popup-close{
+  display:block;margin-top:14px;font-size:13px;color:var(--gray);
+  cursor:pointer;background:none;border:none;font-family:'Nunito',sans-serif;font-weight:600;
+}
+.wa-popup-close:hover{color:var(--dark);}
+
+/* ── FOOTER ── */
+.footer{
+  border-top:1px solid rgba(78,205,196,0.15);
+  padding:32px 0 0;text-align:center;
+  position:relative;z-index:1;
+}
+.footer-inner{max-width:1000px;margin:0 auto;padding:0 22px;}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px;}
+.footer-logo-ico{
+  width:30px;height:30px;border-radius:9px;
+  background:linear-gradient(135deg,var(--wa-green),var(--wa-green-d));
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+.footer-name{font-size:14px;font-weight:900;color:var(--dark);}
+.footer-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:14px;}
+.footer-links a{font-size:12px;color:var(--gray-l);text-decoration:none;font-weight:600;font-family:'JetBrains Mono',monospace;transition:color .2s;}
+.footer-links a:hover{color:var(--teal-d);}
+.footer-copy{margin-top:0;padding:16px 0;border-top:1px solid rgba(78,205,196,0.1);font-size:10.5px;color:var(--gray-l);font-family:'JetBrains Mono',monospace;}
+
+/* ── MOBILE MENU DRAWER ── */
+.overlay{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,0);pointer-events:none;transition:background 0.3s ease;will-change:background;}
+.overlay.open{background:rgba(26,46,46,0.4);pointer-events:auto;backdrop-filter:blur(3px);}
+.side-menu{
+  position:fixed;top:0;left:0;bottom:0;z-index:100;width:270px;
+  background:rgba(240,252,251,0.97);
+  backdrop-filter:blur(32px) saturate(180%);
+  border-right:1px solid rgba(78,205,196,0.2);
+  box-shadow:8px 0 48px rgba(78,205,196,0.12);
+  transform:translate3d(-100%,0,0);
+  transition:transform 0.32s cubic-bezier(0.4,0,0.2,1);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.side-menu.open{transform:translate3d(0,0,0);}
+.sm-head{padding:28px 20px 18px;border-bottom:1px solid rgba(78,205,196,0.15);display:flex;align-items:center;gap:12px;position:relative;}
+.sm-logo-ico{
+  width:40px;height:40px;border-radius:12px;overflow:hidden;
+  border:1.5px solid rgba(78,205,196,0.3);
+  box-shadow:0 4px 14px rgba(78,205,196,0.2);flex-shrink:0;
+}
+.sm-logo-ico img{width:100%;height:100%;object-fit:cover;display:block;}
+.sm-brand{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--teal-d);margin-bottom:2px;}
+.sm-title{font-size:15px;font-weight:900;letter-spacing:-0.3px;color:var(--dark);}
+.sm-close{position:absolute;top:18px;right:16px;width:28px;height:28px;border-radius:50%;background:rgba(78,205,196,0.1);border:1px solid rgba(78,205,196,0.2);color:var(--gray);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.18s;}
+.sm-close:hover{background:rgba(78,205,196,0.2);color:var(--dark);}
+.sm-nav{padding:14px 12px;flex:1;display:flex;flex-direction:column;gap:3px;}
+.sm-btn{display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:12px;background:none;border:none;width:100%;color:var(--gray);font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;transition:all 0.18s;text-align:left;}
+.sm-btn:hover{background:rgba(78,205,196,0.1);color:var(--dark);transform:translateX(3px);}
+.sm-ico{font-size:18px;width:24px;text-align:center;}
+.sm-lbl{flex:1;}
+.sm-arr{font-size:11px;color:var(--teal);}
+.sm-sep{height:1px;background:rgba(78,205,196,0.15);margin:6px 12px;}
+.sm-footer{padding:14px 18px;border-top:1px solid rgba(78,205,196,0.15);text-align:center;font-size:9px;color:var(--gray-l);font-family:'JetBrains Mono',monospace;}
+
+/* ── DIVIDER ── */
+.divider{
+  width:100%;max-width:160px;height:1px;
+  background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  margin:0 auto 64px;opacity:.5;
+}
+
+/* ── BANNER SLIDESHOW ── */
+.banner-wrap{
+  width:100%;max-width:900px;margin:0 auto 56px;
+  position:relative;border-radius:22px;overflow:hidden;
+  box-shadow:0 12px 48px rgba(78,205,196,0.22);
+  aspect-ratio:16/7;
+}
+.banner-slide{
+  position:absolute;inset:0;opacity:0;
+  transition:opacity 0.7s ease;
+}
+.banner-slide.active{opacity:1;z-index:1;}
+.banner-slide img{width:100%;height:100%;object-fit:cover;display:block;}
+.banner-dots{
+  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:5;
+}
+.banner-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,0.5);cursor:pointer;
+  transition:all 0.25s;border:none;padding:0;
+}
+.banner-dot.active{background:white;width:22px;border-radius:4px;}
+.banner-prev,.banner-next{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:5;
+  width:34px;height:34px;border-radius:50%;border:none;
+  background:rgba(255,255,255,0.28);backdrop-filter:blur(8px);
+  color:white;font-size:16px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s;
+}
+.banner-prev{left:12px;}
+.banner-next{right:12px;}
+.banner-prev:hover,.banner-next:hover{background:rgba(255,255,255,0.5);}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.55s ease,transform 0.55s cubic-bezier(0.34,1.2,0.64,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--teal-bg2);}
+::-webkit-scrollbar-thumb{background:var(--teal-xl);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--teal);}
+
+@media(max-width:768px){
+  .nav-links{display:none;}
+  .nav-menu-btn{display:flex;}
+  .guide-wrap{grid-template-columns:1fr;}
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+  .owner-card{flex-direction:column;align-items:flex-start;}
+  .footer-links{gap:14px;}
+  .cta-card{padding:36px 22px;}
+  .hero{padding:60px 5% 48px;}
+}
+@media(max-width:480px){
+  .hero-stats{grid-template-columns:repeat(2,1fr);}
+  .plans-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- SIDE MENU -->
+<nav class="side-menu" id="sideMenu">
+  <div class="sm-head">
+    <div class="sm-logo-ico"><img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT"></div>
+    <div>
+      <div class="sm-brand">Black Cat Ofc</div>
+      <div class="sm-title">Mezuka OPT</div>
+    </div>
+    <button class="sm-close" onclick="closeMenu()">✕</button>
+  </div>
+  <div class="sm-nav">
+    <button class="sm-btn" onclick="navigate('#how')">
+      <span class="sm-ico">⚙️</span><span class="sm-lbl">How It Works</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" onclick="navigate('#plans')">
+      <span class="sm-ico">💎</span><span class="sm-lbl">Plans</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" onclick="navigate('#guide')">
+      <span class="sm-ico">📖</span><span class="sm-lbl">Guide</span><span class="sm-arr">›</span>
+    </button>
+    <button class="sm-btn" onclick="navigate('#owner')">
+      <span class="sm-ico">👤</span><span class="sm-lbl">Owner</span><span class="sm-arr">›</span>
+    </button>
+    <div class="sm-sep"></div>
+    <button class="sm-btn" onclick="navigate('connect.html')">
+      <span class="sm-ico">🚀</span><span class="sm-lbl">Add Your Website</span><span class="sm-arr">›</span>
+    </button>
+  </div>
+  <div class="sm-footer">Powered by <span style="color:var(--teal-d);font-weight:700;">Mezuka OPT</span><br>by Black Cat Ofc</div>
+</nav>
+
+<!-- NAV -->
+<nav class="nav">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button class="nav-menu-btn" onclick="openMenu()"><span></span><span></span><span></span></button>
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon"><img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT"></div>
+      <span class="nav-brand">Mezuka <span>OPT</span></span>
+    </a>
+  </div>
+  <div class="nav-links">
+    <a href="#how">How It Works</a>
+    <a href="#plans">Plans</a>
+    <a href="#guide">Guide</a>
+    <a href="#owner">Owner</a>
+    <a href="connect.html" class="nav-cta">Add Your Website →</a>
+  </div>
+  <a href="connect.html" class="btn-primary" style="display:none;padding:8px 16px;font-size:12px;border-radius:10px;" id="nav-cta-mobile">🚀 Add Site</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pill"><span class="hero-pill-dot"></span>WhatsApp OTP Verification Service</div>
+  <div style="width:100px;height:100px;border-radius:26px;overflow:hidden;border:3px solid rgba(78,205,196,0.25);box-shadow:0 20px 60px rgba(78,205,196,0.28),0 4px 20px rgba(0,0,0,0.06);margin:0 auto 24px;animation:logoPop 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;">
+    <img src="https://files.catbox.moe/6fbu99.jpg" alt="Mezuka OPT" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+  <div class="hero-eyebrow">Black Cat Ofc Presents</div>
+  <h1 class="hero-title">Verify Users via<br/><span>WhatsApp OTP</span></h1>
+  <p class="hero-sub">Add powerful WhatsApp OTP verification to any website in minutes. No complex setup. Just plug in our API and go.</p>
+  <div class="hero-cta">
+    <a href="connect.html" class="btn-primary">🚀 Add Your Website →</a>
+    <a href="#guide" class="btn-ghost">📖 View Guide</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-card">
+      <div class="stat-num">50+</div>
+      <div class="stat-label">Free Daily OTPs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">3s</div>
+      <div class="stat-label">Avg Delivery</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">4</div>
+      <div class="stat-label">Plans Available</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Websites Supported</div>
+    </div>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- ── BANNERS ── -->
+  <div class="banner-wrap reveal">
+    <div class="banner-slide active"><img src="https://files.catbox.moe/4mp4ry.jpg" alt="Banner 1" loading="eager"></div>
+    <div class="banner-slide"><img src="https://files.catbox.moe/92o54h.jpg" alt="Banner 2" loading="lazy"></div>
+    <div class="banner-slide"><img src="https://files.catbox.moe/1q8qfz.jpg" alt="Banner 3" loading="lazy"></div>
+    <button class="banner-prev" onclick="bannerMove(-1)">‹</button>
+    <button class="banner-next" onclick="bannerMove(1)">›</button>
+    <div class="banner-dots">
+      <button class="banner-dot active" onclick="bannerGo(0)"></button>
+      <button class="banner-dot" onclick="bannerGo(1)"></button>
+      <button class="banner-dot" onclick="bannerGo(2)"></button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section reveal" id="how">
+    <div class="sec-hd">
+      <div class="sec-pill">⚙️ Process</div>
+      <h2 class="sec-title">How It Works</h2>
+      <p class="sec-sub">Connect your website to our service in 3 simple steps.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <div class="how-ico">🔗</div>
+        <div class="how-name">Add Your Website</div>
+        <div class="how-desc">Sign up and connect your website. Get a unique API key generated automatically for your account.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <div class="how-ico">📲</div>
+        <div class="how-name">Integrate the API</div>
+        <div class="how-desc">Add our simple HTML snippet to your website. Users enter their WhatsApp number to receive an OTP.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <div class="how-ico">✅</div>
+        <div class="how-name">Verify Users</div>
+        <div class="how-desc">OTP is sent via WhatsApp instantly. User enters it on your site. Verification complete in seconds.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">04</div>
+        <div class="how-ico">📊</div>
+        <div class="how-name">Track Usage</div>
+        <div class="how-desc">Monitor daily OTP usage, upgrade plans when needed. Fully managed, always reliable.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PLANS -->
+  <section class="plans-section reveal" id="plans">
+    <div class="sec-hd">
+      <div class="sec-pill">💎 Pricing</div>
+      <h2 class="sec-title">Choose Your Plan</h2>
+      <p class="sec-sub">Start free, scale as you grow. All plans include WhatsApp delivery.</p>
+    </div>
+    <div class="plans-grid">
+
+      <div class="plan-card">
+        <div class="plan-name">🆓 Free</div>
+        <div class="plan-price">$0<sub>/mo</sub></div>
+        <div class="plan-limit">50 OTPs / day</div>
+        <ul class="plan-features">
+          <li>WhatsApp OTP delivery</li>
+          <li>1 website</li>
+          <li>API access</li>
+          <li>Basic support</li>
+        </ul>
+        <button class="plan-btn plan-btn-free" onclick="window.location.href='connect.html'">Get Started Free</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">⚡ Starter</div>
+        <div class="plan-price">$5<sub>/mo</sub></div>
+        <div class="plan-limit">80 OTPs / day</div>
+        <ul class="plan-features">
+          <li>WhatsApp OTP delivery</li>
+          <li>3 websites</li>
+          <li>Priority delivery</li>
+          <li>Email support</li>
+        </ul>
+        <button class="plan-btn plan-btn-paid" onclick="openBuyPopup('Starter – $5/mo – 80 OTPs/day')">Buy Plan</button>
+      </div>
+
+      <div class="plan-card popular">
+        <div class="plan-badge">MOST POPULAR</div>
+        <div class="plan-name">🚀 Pro</div>
+        <div class="plan-price">$12<sub>/mo</sub></div>
+        <div class="plan-limit">150 OTPs / day</div>
+        <ul class="plan-features">
+          <li>WhatsApp OTP delivery</li>
+          <li>10 websites</li>
+          <li>Fastest delivery</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="plan-btn plan-btn-paid" onclick="openBuyPopup('Pro – $12/mo – 150 OTPs/day')">Buy Plan</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">♾️ Unlimited</div>
+        <div class="plan-price">$25<sub>/mo</sub></div>
+        <div class="plan-limit">Unlimited OTPs</div>
+        <ul class="plan-features">
+          <li>WhatsApp OTP delivery</li>
+          <li>Unlimited websites</li>
+          <li>Dedicated sender</li>
+          <li>24/7 VIP support</li>
+        </ul>
+        <button class="plan-btn plan-btn-paid" onclick="openBuyPopup('Unlimited – $25/mo – Unlimited OTPs')">Buy Plan</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BUY POPUP -->
+  <div class="wa-popup" id="buyPopup">
+    <div class="wa-popup-box">
+      <div style="font-size:38px;margin-bottom:12px;">💬</div>
+      <h3>Contact to Purchase</h3>
+      <p id="popupPlanText">Send a WhatsApp message to the owner to purchase this plan. You'll receive your upgraded account details.</p>
+      <a id="popupWaLink" href="#" target="_blank" class="wa-popup-btn">📱 Open WhatsApp</a>
+      <button class="wa-popup-close" onclick="closeBuyPopup()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GUIDE -->
+  <section class="guide-section reveal" id="guide">
+    <div class="sec-hd">
+      <div class="sec-pill">📖 Documentation</div>
+      <h2 class="sec-title">Quick Guide</h2>
+      <p class="sec-sub">Everything you need to integrate Mezuka OPT into your website.</p>
+    </div>
+    <div class="guide-wrap">
+      <div class="guide-block">
+        <h3>🔗 Get Your API Key</h3>
+        <ol>
+          <li>Click <strong>"Add Your Website"</strong> button</li>
+          <li>Fill in your website name & URL</li>
+          <li>Verify your WhatsApp number via OTP</li>
+          <li>Your <strong>API key</strong> is auto-generated</li>
+          <li>Copy the provided HTML snippet</li>
+          <li>Paste it into your website</li>
+        </ol>
+        <div class="code-pill">GET /api/requestotp/:phone</div>
+      </div>
+      <div class="guide-block">
+        <h3>📡 API Endpoints</h3>
+        <ul>
+          <li><strong>Request OTP:</strong> GET /api/requestotp/:phone</li>
+          <li><strong>Verify OTP:</strong> GET /api/verifyotp/:phone/:otp</li>
+          <li><strong>Refresh Token:</strong> POST /api/refresh</li>
+          <li><strong>Check Status:</strong> GET /api/optstatus/:phone</li>
+          <li><strong>Opt Out:</strong> GET /api/optout/:phone</li>
+          <li><strong>Health Check:</strong> GET /api/health</li>
+        </ul>
+      </div>
+      <div class="guide-block">
+        <h3>⚙️ How OTP Works</h3>
+        <ol>
+          <li>User enters their <strong>WhatsApp number</strong></li>
+          <li>Your site calls our <strong>API</strong> with their number</li>
+          <li>We send a <strong>6-digit OTP</strong> via WhatsApp</li>
+          <li>User enters OTP — we verify it</li>
+          <li>We return an <strong>Access + Refresh Token</strong></li>
+          <li>Use tokens for authenticated requests</li>
+        </ol>
+      </div>
+      <div class="guide-block">
+        <h3>🔐 Security Features</h3>
+        <ul>
+          <li>OTP expires in <strong>5 minutes</strong></li>
+          <li>Max <strong>5 attempts</strong> per OTP</li>
+          <li><strong>60s cooldown</strong> between requests</li>
+          <li>Access tokens expire in <strong>15 minutes</strong></li>
+          <li>Refresh tokens last <strong>30 days</strong></li>
+          <li>All hashed with <strong>SHA-256</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <section class="cta-section reveal">
+    <div class="cta-card">
+      <div class="cta-label">🔗 Quick Setup</div>
+      <h2 class="cta-title">Add OTP in 60 Seconds</h2>
+      <p class="cta-sub">Connect your website and start sending WhatsApp OTPs instantly — no complex setup needed.</p>
+      <a class="btn-white" href="connect.html">🚀 Add Your Website →</a>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- OWNER -->
+  <section class="owner-section reveal" id="owner">
+    <div class="sec-hd">
+      <div class="sec-pill">👤 Team</div>
+      <h2 class="sec-title">Meet the Owner</h2>
+    </div>
+    <div class="owner-card">
+      <div class="owner-avatar">😺</div>
+      <div class="owner-info">
+        <div class="owner-role">Founder & Developer</div>
+        <div class="owner-name">Nimeshka Mihiran</div>
+        <div class="owner-desc">Building powerful WhatsApp automation tools for developers and businesses across Sri Lanka and beyond. Mezuka OPT Service is designed to make WhatsApp verification simple, reliable, and affordable for everyone.</div>
+        <div class="owner-tags">
+          <span class="owner-tag">🐱 Black Cat Ofc</span>
+          <span class="owner-tag">Developer</span>
+          <span class="owner-tag">Mezuka OPT</span>
+        </div>
+        <div class="owner-links">
+          <div class="owner-link-row">
+            <span>📱</span>
+            <a href="https://wa.me/94721584279" target="_blank">+94 721 584 279</a>
+          </div>
+          <div class="owner-link-row">
+            <span>💬</span>
+            <a href="https://wa.me/94721584279?text=Hi%20Nimeshka!" target="_blank">Message on WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="footer-logo-ico" style="width:30px;height:30px;border-radius:9px;overflow:hidden;"><img src="https://files.catbox.moe/6fbu99.jpg" alt="logo" style="width:100%;height:100%;object-fit:cover;display:block;"></div>
+      <div class="footer-name">Mezuka OPT Service</div>
+    </div>
+    <div class="footer-links">
+      <a href="#how">How It Works</a>
+      <a href="#plans">Plans</a>
+      <a href="#guide">Guide</a>
+      <a href="#owner">Owner</a>
+      <a href="connect.html">Add Website</a>
+      <a href="https://wa.me/94721584279" target="_blank">Contact</a>
+    </div>
+    <div class="footer-copy">© 2026 Mezuka OPT Service · Black Cat Ofc · made by nimeshka mihiran</div>
+  </div>
+</footer>
+
+<script>
+// ── MENU ──
+let menuOpen=false;
+function openMenu(){
+  if(menuOpen)return;menuOpen=true;
+  document.getElementById('sideMenu').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeMenu(){
+  if(!menuOpen)return;menuOpen=false;
+  document.getElementById('sideMenu').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function navigate(page){
+  closeMenu();
+  setTimeout(()=>{
+    if(page.startsWith('#')){
+      const t=document.querySelector(page);
+      if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    } else {
+      window.location.href=page;
+    }
+  },200);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
+
+// ── BUY POPUP ──
+function openBuyPopup(planName){
+  const msg=encodeURIComponent(`Hi Nimeshka! I want to buy the *${planName}* plan for Mezuka OPT Service. Please help me upgrade my account.`);
+  document.getElementById('popupPlanText').textContent=`You selected: ${planName}. Send a WhatsApp message to the owner to complete your purchase.`;
+  document.getElementById('popupWaLink').href=`https://wa.me/94721584279?text=${msg}`;
+  document.getElementById('buyPopup').classList.add('open');
+}
+function closeBuyPopup(){document.getElementById('buyPopup').classList.remove('open');}
+document.getElementById('buyPopup').addEventListener('click',function(e){if(e.target===this)closeBuyPopup();});
+
+// ── SCROLL REVEAL ──
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+
+// ── BANNER SLIDESHOW ──
+let _bIdx=0,_bAuto;
+const _bSlides=document.querySelectorAll('.banner-slide');
+const _bDots=document.querySelectorAll('.banner-dot');
+function bannerGo(n){
+  _bSlides[_bIdx].classList.remove('active');
+  _bDots[_bIdx].classList.remove('active');
+  _bIdx=(n+_bSlides.length)%_bSlides.length;
+  _bSlides[_bIdx].classList.add('active');
+  _bDots[_bIdx].classList.add('active');
+  resetBannerAuto();
+}
+function bannerMove(dir){bannerGo(_bIdx+dir);}
+function resetBannerAuto(){clearInterval(_bAuto);_bAuto=setInterval(()=>bannerMove(1),4000);}
+resetBannerAuto();
+// Swipe on banner
+(()=>{
+  const w=document.querySelector('.banner-wrap');
+  if(!w)return;
+  let sx=0;
+  w.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  w.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)bannerMove(dx<0?1:-1);},{passive:true});
+})();
+
+// ── MOBILE NAV CTA ──
+const mobileCta=document.getElementById('nav-cta-mobile');
+if(window.innerWidth<=768)mobileCta.style.display='inline-flex';
+window.addEventListener('resize',()=>{
+  mobileCta.style.display=window.innerWidth<=768?'inline-flex':'none';
+});
+</script>
+</body>
+</html>

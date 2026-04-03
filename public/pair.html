@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mezuka MD – Pair Device</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #0a0a0f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #e0e0e0;
+      padding: 20px;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(37,211,102,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(18,140,126,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(37,211,102,0.2);
+      border-radius: 24px;
+      padding: 40px 36px;
+      max-width: 460px;
+      width: 100%;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 60px rgba(37,211,102,0.06), 0 20px 60px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    /* Top glow line */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 20%; right: 20%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(37,211,102,0.6), transparent);
+      border-radius: 999px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .logo-text { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+    .logo-sub  { font-size: 12px; color: #25d366; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #888;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .input-wrap {
+      position: relative;
+      flex: 1;
+    }
+
+    .flag {
+      position: absolute;
+      left: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    input[type="tel"] {
+      width: 100%;
+      padding: 14px 14px 14px 42px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
+
+    input[type="tel"]::placeholder { color: #555; }
+
+    input[type="tel"]:focus {
+      border-color: rgba(37,211,102,0.5);
+      box-shadow: 0 0 0 3px rgba(37,211,102,0.1);
+    }
+
+    button#pairBtn {
+      padding: 14px 22px;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+
+    button#pairBtn:hover  { opacity: 0.9; }
+    button#pairBtn:active { transform: scale(0.97); }
+    button#pairBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Code display */
+    .code-box {
+      display: none;
+      background: rgba(37,211,102,0.06);
+      border: 1px solid rgba(37,211,102,0.3);
+      border-radius: 18px;
+      padding: 28px 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .code-label {
+      font-size: 12px;
+      color: #25d366;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+
+    .code-value {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: 8px;
+      color: #fff;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 30px rgba(37,211,102,0.4);
+    }
+
+    .code-number {
+      font-size: 13px;
+      color: #666;
+      margin-top: 10px;
+    }
+
+    .copy-btn {
+      margin-top: 14px;
+      padding: 8px 20px;
+      background: rgba(37,211,102,0.15);
+      border: 1px solid rgba(37,211,102,0.3);
+      border-radius: 8px;
+      color: #25d366;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+    .copy-btn:hover { background: rgba(37,211,102,0.25); }
+
+    /* Steps */
+    .steps {
+      display: none;
+      margin-bottom: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .steps-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #888;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .step-num {
+      width: 24px; height: 24px;
+      background: rgba(37,211,102,0.15);
+      border: 1px solid rgba(37,211,102,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #25d366;
+      flex-shrink: 0;
+    }
+
+    .step-text { font-size: 13px; color: #aaa; line-height: 1.5; padding-top: 3px; }
+
+    /* Status */
+    .status {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .status.loading {
+      display: flex;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #aaa;
+    }
+
+    .status.error {
+      display: flex;
+      background: rgba(255,80,80,0.08);
+      border: 1px solid rgba(255,80,80,0.25);
+      color: #ff8080;
+    }
+
+    .status.success {
+      display: flex;
+      background: rgba(37,211,102,0.08);
+      border: 1px solid rgba(37,211,102,0.25);
+      color: #25d366;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-top-color: #25d366;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Timer bar */
+    .timer-wrap {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .timer-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .timer-bar-bg {
+      height: 4px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .timer-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #25d366, #128c7e);
+      border-radius: 999px;
+      transition: width 1s linear, background 1s;
+      width: 100%;
+    }
+
+    .footer {
+      margin-top: 28px;
+      text-align: center;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .footer span { color: #25d366; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+
+  <div class="logo">
+    <div class="logo-icon">🌸</div>
+    <div>
+      <div class="logo-text">Mezuka MD</div>
+      <div class="logo-sub">Link Device</div>
+    </div>
+  </div>
+
+  <h1>Pair Your Device</h1>
+  <p class="subtitle">Enter your WhatsApp number to get a pairing code. No QR scan needed.</p>
+
+  <!-- Input -->
+  <div class="input-group">
+    <div class="input-wrap">
+      <span class="flag">📱</span>
+      <input
+        type="tel"
+        id="phoneInput"
+        placeholder="94712345678"
+        maxlength="15"
+        autocomplete="tel"
+      />
+    </div>
+    <button id="pairBtn" onclick="getPairCode()">Get Code</button>
+  </div>
+
+  <!-- Status bar -->
+  <div class="status" id="statusBar">
+    <div class="spinner" id="spinner"></div>
+    <span id="statusMsg">Generating pairing code…</span>
+  </div>
+
+  <!-- Code display -->
+  <div class="code-box" id="codeBox">
+    <div class="code-label">Your Pairing Code</div>
+    <div class="code-value" id="codeValue">----</div>
+    <div class="code-number" id="codeNumber"></div>
+    <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+
+    <!-- Timer -->
+    <div class="timer-wrap" id="timerWrap">
+      <div class="timer-label">
+        <span>Code expires in</span>
+        <span id="timerText">3:00</span>
+      </div>
+      <div class="timer-bar-bg">
+        <div class="timer-bar" id="timerBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <div class="steps" id="stepsBox">
+    <div class="steps-title">How to link</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">Open <strong>WhatsApp</strong> on your phone</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">Go to <strong>Settings → Linked Devices</strong></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">Tap <strong>"Link with phone number"</strong></div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text">Enter the code shown above</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Powered by <span>Black Cat Ofc</span> &nbsp;·&nbsp; © Mezuka MD V4 2026
+  </div>
+
+</div>
+
+<script>
+  let timerInterval = null;
+  let lastCode = '';
+
+  // Allow pressing Enter in input
+  document.getElementById('phoneInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') getPairCode();
+  });
+
+  function setStatus(type, msg) {
+    const bar = document.getElementById('statusBar');
+    const sp  = document.getElementById('spinner');
+    const sm  = document.getElementById('statusMsg');
+
+    bar.className = 'status ' + type;
+    bar.style.display = 'flex';
+    sp.style.display  = type === 'loading' ? 'block' : 'none';
+    sm.textContent = msg;
+  }
+
+  function hideStatus() {
+    document.getElementById('statusBar').style.display = 'none';
+  }
+
+  function showCode(code, number) {
+    lastCode = code.replace(/-/g, '');
+
+    document.getElementById('codeValue').textContent = code;
+    document.getElementById('codeNumber').textContent = '+' + number;
+    document.getElementById('codeBox').style.display  = 'block';
+    document.getElementById('stepsBox').style.display = 'block';
+
+    startTimer(180); // 3 min countdown
+  }
+
+  function startTimer(seconds) {
+    const wrap = document.getElementById('timerWrap');
+    const bar  = document.getElementById('timerBar');
+    const text = document.getElementById('timerText');
+    wrap.style.display = 'block';
+
+    let remaining = seconds;
+    clearInterval(timerInterval);
+
+    const update = () => {
+      const pct = (remaining / seconds) * 100;
+      bar.style.width = pct + '%';
+
+      if (pct < 30) bar.style.background = 'linear-gradient(90deg,#ff6b6b,#ff4444)';
+      else if (pct < 60) bar.style.background = 'linear-gradient(90deg,#ffd43b,#fab005)';
+      else bar.style.background = 'linear-gradient(90deg,#25d366,#128c7e)';
+
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      text.textContent = m + ':' + String(s).padStart(2, '0');
+
+      if (remaining <= 0) {
+        clearInterval(timerInterval);
+        setStatus('error', 'Code expired. Please request a new one.');
+        document.getElementById('codeBox').style.display  = 'none';
+        document.getElementById('stepsBox').style.display = 'none';
+        document.getElementById('pairBtn').disabled = false;
+      }
+      remaining--;
+    };
+
+    update();
+    timerInterval = setInterval(update, 1000);
+  }
+
+  async function getPairCode() {
+    const input = document.getElementById('phoneInput');
+    const btn   = document.getElementById('pairBtn');
+    const number = input.value.replace(/\D/g, '').trim();
+
+    if (!number || number.length < 7) {
+      setStatus('error', 'Please enter a valid phone number (e.g. 94712345678)');
+      return;
+    }
+
+    // Reset UI
+    clearInterval(timerInterval);
+    document.getElementById('codeBox').style.display  = 'none';
+    document.getElementById('stepsBox').style.display = 'none';
+    btn.disabled = true;
+    setStatus('loading', 'Generating pairing code… please wait');
+
+    try {
+      const res  = await fetch(`/code?number=${encodeURIComponent(number)}`);
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        const errMap = {
+          'NUMBER_REQUIRED':      'Phone number is required.',
+          'INVALID_PHONE':        'Invalid phone number. Use international format.',
+          'PAIR_CODE_TIMEOUT':    'Timed out. Please try again.',
+          'PAIR_FAILED':          'Failed to get code. ' + (data.detail || ''),
+          'already_connected':    'This number is already connected! ✅',
+          'pairing_in_progress':  'Pairing already in progress. Please wait a moment.',
+        };
+        const msg = errMap[data.error || data.status] || data.message || 'Something went wrong.';
+
+        if (data.status === 'already_connected') {
+          setStatus('success', msg);
+        } else {
+          setStatus('error', msg);
+        }
+        btn.disabled = false;
+        return;
+      }
+
+      hideStatus();
+      showCode(data.code, data.number);
+
+    } catch (err) {
+      setStatus('error', 'Network error. Is the server running?');
+    }
+
+    btn.disabled = false;
+  }
+
+  async function copyCode() {
+    const code = document.getElementById('codeValue').textContent;
+    try {
+      await navigator.clipboard.writeText(code.replace(/-/g, ''));
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✅ Copied!';
+      setTimeout(() => btn.textContent = '📋 Copy Code', 2000);
+    } catch {
+      alert('Code: ' + code);
+    }
+  }
+</script>
+
+</body>
+</html>
