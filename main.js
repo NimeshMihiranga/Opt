@@ -2,13 +2,19 @@
  * ╔══════════════════════════════════════════════════════════╗
  * ║       MEZUKA OPT SERVICE – by Black Cat Ofc              ║
  * ╠══════════════════════════════════════════════════════════╣
+ * ║  Internal (connect.html):                                ║
  * ║  GET  /api/requestotp/:phone                             ║
  * ║  GET  /api/verifyotp/:phone/:otp                         ║
  * ║  POST /api/refresh          (body: {refreshToken})       ║
  * ║  GET  /api/optstatus/:phone                              ║
  * ║  GET  /api/optout/:phone    (Bearer accessToken)         ║
- * ║  GET  /api/health                                        ║
+ * ║  POST /api/register         (Bearer accessToken)         ║
  * ╠══════════════════════════════════════════════════════════╣
+ * ║  External (API key protected – for user websites):       ║
+ * ║  GET  /api/sendotp/:apiKey/:phone                        ║
+ * ║  GET  /api/verifyopt/:apiKey/:phone/:otp                 ║
+ * ╠══════════════════════════════════════════════════════════╣
+ * ║  GET  /api/health                                        ║
  * ║  OTP      : 6-digit, expires in 5 minutes               ║
  * ║  Auth     : Access Token (15 min) + Refresh (30 days)   ║
  * ╚══════════════════════════════════════════════════════════╝
@@ -540,6 +546,151 @@ Your number *+${phone}* is now opted in to *Mezuka MD*.
     } catch(err) {
       console.error('❌ [register]', err.message);
       return res.status(500).json({ success:false, error:'INTERNAL_ERROR' });
+    }
+  });
+
+  // ══════════════════════════════════════════════════════════════════════════
+  //  EXTERNAL API KEY ROUTES  (for user websites – /api/sendotp & /api/verifyopt)
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ── Helper: validate API key & check daily limit ────────────────────────────
+  async function validateApiKey(apiKey) {
+    await initDB();
+    const usersCol = _db.collection('opt_users');
+    const user = await usersCol.findOne({ apiKey });
+
+    if (!user)        return { ok: false, error: 'INVALID_API_KEY',   status: 401 };
+    if (!user.active) return { ok: false, error: 'API_KEY_SUSPENDED', status: 403 };
+
+    // Daily limit check (unlimited = -1)
+    if (user.dailyLimit !== -1) {
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
+      const usageCol = _db.collection('api_usage');
+      const todayDoc = await usageCol.findOne({ apiKey, date: todayStart.toISOString().slice(0, 10) });
+      const used = todayDoc?.count || 0;
+
+      if (used >= user.dailyLimit) {
+        return {
+          ok: false,
+          error:   'DAILY_LIMIT_REACHED',
+          status:  429,
+          message: `Daily OTP limit (${user.dailyLimit}) reached. Upgrade your plan or wait until tomorrow.`,
+          plan:    user.plan,
+          limit:   user.dailyLimit,
+          used,
+        };
+      }
+    }
+
+    return { ok: true, user };
+  }
+
+  // ── Helper: increment daily usage count ────────────────────────────────────
+  async function incrementUsage(apiKey) {
+    const usageCol = _db.collection('api_usage');
+    const today    = new Date().toISOString().slice(0, 10);
+    await usageCol.updateOne(
+      { apiKey, date: today },
+      { $inc: { count: 1 }, $setOnInsert: { apiKey, date: today, createdAt: new Date() } },
+      { upsert: true }
+    );
+  }
+
+  // ── EXTERNAL ROUTE 1: Send OTP  GET /api/sendotp/:apiKey/:phone ────────────
+  app.get('/api/sendotp/:apiKey/:phone', async (req, res) => {
+    if (!rateLimit(req, res)) return;
+    try {
+      const { apiKey, phone: rawPhone } = req.params;
+      const phone = normalizePhone(rawPhone);
+
+      // Validate API key + plan limit
+      const check = await validateApiKey(apiKey);
+      if (!check.ok) return res.status(check.status).json({ success: false, error: check.error, message: check.message, plan: check.plan, limit: check.limit, used: check.used });
+
+      if (!isValidPhone(phone))
+        return res.status(400).json({ success: false, error: 'INVALID_PHONE', message: 'Phone must be 7–15 digits e.g. 94771234567' });
+
+      // Cooldown check
+      const recent = await otpCol.findOne({ phone, createdAt: { $gt: new Date(Date.now() - OTP_COOLDOWN_SECS * 1000) } });
+      if (recent) {
+        const wait = Math.ceil(OTP_COOLDOWN_SECS - (Date.now() - recent.createdAt.getTime()) / 1000);
+        return res.status(429).json({ success: false, error: 'COOLDOWN', message: `Wait ${wait}s before requesting another OTP`, retryAfterSeconds: wait });
+      }
+
+      const otp = generateOtp();
+      await otpCol.deleteMany({ phone });
+      await otpCol.insertOne({ phone, otpHash: sha256(otp), createdAt: new Date(), attempts: 0, verified: false, apiKey });
+
+      await sendOtpWhatsApp(phone, otp);
+      await incrementUsage(apiKey);
+
+      console.log(`📤 [EXT-OTP] Sent to ${phone} | key: ${apiKey.slice(0, 12)}…`);
+
+      return res.json({
+        success:          true,
+        message:          `OTP sent to WhatsApp +${phone}`,
+        expiresInSeconds: OTP_EXPIRE_SECS,
+        plan:             check.user.plan,
+      });
+
+    } catch (err) {
+      console.error('❌ [sendotp]', err.message);
+      if (err.message === 'OTP_SENDER_NOT_READY')
+        return res.status(503).json({ success: false, error: 'SERVICE_UNAVAILABLE', message: 'WhatsApp OTP sender not ready. Try again shortly.' });
+      return res.status(500).json({ success: false, error: 'INTERNAL_ERROR' });
+    }
+  });
+
+  // ── EXTERNAL ROUTE 2: Verify OTP  GET /api/verifyopt/:apiKey/:phone/:otp ───
+  app.get('/api/verifyopt/:apiKey/:phone/:otp', async (req, res) => {
+    if (!rateLimit(req, res)) return;
+    try {
+      const { apiKey, phone: rawPhone, otp: rawOtp } = req.params;
+      const phone = normalizePhone(rawPhone);
+      const otp   = String(rawOtp).replace(/\D/g, '');
+
+      // Validate API key
+      const check = await validateApiKey(apiKey);
+      if (!check.ok) return res.status(check.status).json({ success: false, error: check.error, message: check.message });
+
+      if (!isValidPhone(phone))
+        return res.status(400).json({ success: false, error: 'INVALID_PHONE' });
+      if (!/^\d{6}$/.test(otp))
+        return res.status(400).json({ success: false, error: 'INVALID_OTP_FORMAT', message: 'OTP must be 6 digits' });
+
+      const record = await otpCol.findOne({ phone });
+
+      if (!record)
+        return res.status(404).json({ success: false, error: 'OTP_NOT_FOUND', message: 'No active OTP. It may have expired (5 min). Request a new one.' });
+      if (record.verified)
+        return res.status(409).json({ success: false, error: 'OTP_ALREADY_USED' });
+      if (record.attempts >= 5) {
+        await otpCol.deleteOne({ phone });
+        return res.status(429).json({ success: false, error: 'TOO_MANY_ATTEMPTS', message: 'Too many wrong attempts. Request a new OTP.' });
+      }
+      if (sha256(otp) !== record.otpHash) {
+        await otpCol.updateOne({ phone }, { $inc: { attempts: 1 } });
+        const left = 5 - (record.attempts + 1);
+        return res.status(401).json({ success: false, error: 'INVALID_OTP', message: `Wrong OTP. ${left} attempt(s) remaining.`, attemptsRemaining: left });
+      }
+
+      // OTP correct ✅
+      await otpCol.deleteOne({ phone });
+      console.log(`✅ [EXT-VERIFY] Verified ${phone} | key: ${apiKey.slice(0, 12)}…`);
+
+      return res.json({
+        success:  true,
+        message:  'Phone number verified successfully',
+        phone,
+        verified: true,
+        plan:     check.user.plan,
+      });
+
+    } catch (err) {
+      console.error('❌ [verifyopt]', err.message);
+      return res.status(500).json({ success: false, error: 'INTERNAL_ERROR' });
     }
   });
 
