@@ -12,6 +12,7 @@
 'use strict';
 
 const express = require('express');
+const cors    = require('cors');
 const path    = require('path');
 const fs      = require('fs-extra');
 
@@ -28,6 +29,13 @@ const { registerOtpRoutes, registerGithubRoutes, registerGoogleRoutes, initOtpSe
 
 const API_PORT = Number(process.env.API_PORT) || 3000;
 const app = express();
+
+// ── CORS – allow all origins (fixes browser fetch from local/external sites) ──
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -249,3 +257,4 @@ app.use((req, res) => res.status(404).json({ success: false, error: 'NOT_FOUND' 
     console.log(`📊 Status: /connect`);
   });
 })();
+
